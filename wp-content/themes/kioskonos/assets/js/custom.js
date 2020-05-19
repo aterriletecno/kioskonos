@@ -1,5 +1,18 @@
 $(document).ready(function(){
 
+    $("img").each(function(){
+        $(this).attr('srcset','');
+        $(this).attr('sizes','');
+    })
+
+    $(document).keyup(function(e) {
+        if (e.key === "Escape") { // escape key maps to keycode `27`
+            $(".alert_overlay, .alert_container").fadeOut(300, function() {
+                $(".alert_overlay, .alert_container").remove();
+            });
+        }
+    });
+
     if( $(window).width() < 768 ){
         $("#categoryTree").removeClass('in')
     }

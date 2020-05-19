@@ -1,4 +1,5 @@
 <?php
+@session_start();
 /**
  * The Header for our theme.
  *
@@ -148,7 +149,7 @@ $categorias = get_categories($args);
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu dropdown-with-icons">
-							<?php if(session('loggged')): ?>
+							<?php if(session('logged')): ?>
 							<li>
 								<a href="<?php bloginfo('wpurl') ?>/usuarios/angelo-terrile"> 
 									<i class="material-icons">person</i> Mi Perfil

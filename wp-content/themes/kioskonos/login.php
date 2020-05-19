@@ -4,6 +4,15 @@
  * Template Name: Login
  *
  */
+
+if( $_POST || session('logged') ):
+	$user = checkValidUser($_POST['email'],$_POST['password']);
+	if($user):
+		header('Location: ' . get_bloginfo('wpurl') . '/editar-tienda/?t=' . session('tienda_id'));
+		exit();
+	endif;
+endif;
+
 get_header(); 
 
 while (have_posts()) : the_post();
@@ -43,14 +52,14 @@ while (have_posts()) : the_post();
 							<span class="input-group-addon">
 								<i class="material-icons">email</i>
 							</span>
-							<input type="email" class="form-control" placeholder="Email..." required>
+							<input type="email" name="email" class="form-control" placeholder="Email..." required>
 						</div>
 
 						<div class="input-group">
 							<span class="input-group-addon">
 								<i class="material-icons">lock_outline</i>
 							</span>
-							<input type="password" placeholder="Password..." class="form-control" required />
+							<input type="password" name="password" placeholder="Password..." class="form-control" required />
 						</div>
 						<div class="text-center">
 							<button type="submit" class="btn btn-success">Acceder &nbsp; <i class="material-icons">forward</i></button>

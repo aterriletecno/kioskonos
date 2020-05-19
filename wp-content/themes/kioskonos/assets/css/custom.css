@@ -25,6 +25,10 @@
     margin-left: -250px;
 }
 
+.alert_container img{
+    width: 100%;
+    height: auto;
+}
 
 .row-centered{
     text-align: center;
@@ -118,6 +122,36 @@ a:hover, a:focus{
 .navbar.navbar-default .dropdown-menu li > a:hover, 
 .navbar.navbar-default .dropdown-menu li > a:focus{
     background-color: #4caf50;
+}
+
+.togglebutton label .toggle, 
+.togglebutton label input[type=checkbox][disabled] + .toggle{
+    width: 50px;
+    height: 25px;
+}
+.togglebutton label input[type=checkbox]:checked + .toggle:after{
+    left: 25px;
+}
+.togglebutton label {
+    color: rgba(9, 9, 9, 0.8);
+}
+
+.togglebutton label .toggle:after{
+    width: 30px;
+    height: 30px;
+}
+
+.input-group-addon.lg,
+.fa.lg{
+    font-size: 26px;
+}
+
+#previewBanner{
+    display: block;
+    width: 300px;
+    height: 80px;
+    margin: 0 auto;
+    object-fit: cover;
 }
 
 .form-group.is-focused .form-control {
@@ -398,8 +432,23 @@ body.single-productos .main-product .nav > li{
         margin-left: -150px;
     }
 
+
+
     #categoryTree{
         height: 300px;
         overflow: auto;
+    }
+}
+
+
+@media(max-width: 480px){
+    .profile-page .profile img {
+        width: 130px;
+        height: 130px;
+    }
+
+    #previewBanner{
+        width: 90%;
+        height: 60px
     }
 }
