@@ -35,7 +35,7 @@ $avatar = get_field('avatar');
         <div class="container">
 
         	<div class="avatar">
-        		<img src="<?php echo $avatar['url'] ?>">
+        		<?php the_post_thumbnail('thumbnail'); ?>
         	</div>
 
         	<div class="about-description text-center mt-5 pt-5">
@@ -56,9 +56,11 @@ $avatar = get_field('avatar');
 
 							<div class="panel panel-default panel-rose">
 								<div class="panel-heading" role="tab" id="headingThree">
-									<h4 class="panel-title">Categorias</h4>
+									<h4 class="panel-title pull-left">Categorias</h4>
+									<a  class="collapsed hidden-lg hidden-md" role="button" data-toggle="collapse" data-parent="#accordion" href="#categoryTree" aria-expanded="false" aria-controls="categoryTree" class="pull-right"><i class="fa fa-angle-down"></i></a>
+									<div class="clearfix"></div>
 								</div>
-								<div>
+								<div id="categoryTree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
 									<div class="panel-body">
 										<?php foreach ($categorias as $category) { ?>
 										<div class="checkbox">
@@ -90,32 +92,36 @@ $avatar = get_field('avatar');
 				 		while( $query->have_posts() ) : $query->the_post();
 				 		?>
 
-					 	<div class="col-md-4">
-   							 <div class="card card-product card-plain no-shadow" data-colored-shadow="false">
-   								 <div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
-   									 <a href="<?php the_permalink(); ?>">
-   										 <?php the_post_thumbnail('product-thumbnail', ['title'=>the_title(),'alt'=>the_title()]) ?>
-   									 </a>
-   								 </div>
-   								 <div class="card-content">
-   									 <a href="<?php the_permalink(); ?>">
-   										 <h4 class="card-title"><?php the_title() ?></h4>
-   									 </a>
-   									 <p class="description">
-   										<?php echo excerpt(get_the_content(),10) ?>
-   									 </p>
-   									 <div class="footer">
-										 <div class="price-container">
-										 	<span class="price"> <?php the_field('precio') ?></span>
-										 </div>
+					 	<div class="col-sm-6 col-md-4 col-centered">
+							<div class="card card-product">
+								<div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
+									<a href="<?php the_permalink() ?>">
+										<?php the_post_thumbnail('product-thumbnail', ['class'=>'img','title'=>get_the_title(),'alt'=>get_the_title()]) ?>
+									</a>
+								</div>
 
-   										 <button class="btn btn-rose btn-simple btn-fab btn-fab-mini btn-round pull-right" rel="tooltip" title="Remove from wishlist" data-placement="left">
-   											 <i class="material-icons">favorite</i>
-   										 </button>
-   									 </div>
-   								 </div>
-   							 </div> <!-- end card -->
-					  	</div>
+								<div class="card-content">
+									<h4 class="card-title">
+										<a href="<?php the_permalink() ?>"><?php the_title() ?></a>
+									</h4>
+									<div class="card-description">
+										<?php echo excerpt(get_the_content(),12) ?>
+									</div>
+									<div class="footer">
+		                                <div class="price">
+											<h4><?php the_field('precio') ?></h4>
+										</div>
+		                            	<div class="stats">
+											<button onclick="javascript: alerta({text:'Debes estar registrado y acceder para guardar tus favoritos'})" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
+												<i class="fa fa-heart-o"></i>
+											</button>
+		                            	</div>
+		                            </div>
+
+								</div>
+
+							</div>
+						</div>
 					  	<?php  
 					  	endwhile;	
 					  	wp_reset_query();

@@ -1,6 +1,86 @@
 <?php
+@session_start();
+
+function logout(){
+    $_SESSION['kioskonos_logged'] = false;
+    $_SESSION['kioskonos_user_id'] = false;
+    $_SESSION['kioskonos_nombre_completo'] = false;
+    $_SESSION['kioskonos_email'] = false;
+    $_SESSION['kioskonos_tienda_id'] = false;
+}
+
+
+/** 
+ * Busca un usuario valido
+ *  
+ * @param (string) $email, Email
+ * @param (string) $pass, Password
+ * @return (string) 
+ */ 
+function checkValidUser($email, $pass){
+    $user_args = array( 
+        'post_type'  => 'usuarios',
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key'   => 'email',
+                'value' => $email
+            ),
+            array(
+                'key'   => 'password',
+                'value' => $pass
+            ),
+            array(
+                'key'   => 'activo',
+                'value' => 1
+            )
+        )
+    );  
+
+    $valid_user = new WP_Query( $user_args );
+
+    if($valid_user->found_posts > 0){
+
+        $user = [];
+        while( $valid_user->have_posts() ) : $valid_user->the_post();
+            $tienda = get_field('tienda',get_the_ID());
+
+            $_SESSION['kioskonos_logged'] = true;
+            $_SESSION['kioskonos_user_id'] = get_the_ID();
+            $_SESSION['kioskonos_nombre_completo'] = get_the_title( get_the_ID() );
+            $_SESSION['kioskonos_email'] = get_field('email',get_the_ID());
+            $_SESSION['kioskonos_tienda_id'] = $tienda->ID;
+
+            $user = [
+                'user_id' => $_SESSION['kioskonos_userid'],
+                'nombre_completo' => $_SESSION['kioskonos_nombre_completo'],
+                'email' => $_SESSION['kioskonos_email'],
+                'tienda_id' => $_SESSION['kioskonos_tiendaid']
+            ];
+        endwhile;
+
+        return $user;
+
+    } else {
+        return false;
+    }
+
+}
+
+/** 
+ * Retorna el valor de una variable de session 
+ *  
+ * @param (string) $var_sess, Nombre de la variable de session 
+ * @return (string) 
+ */ 
+function session($var_sess){ 
+    return $_SESSION['kioskonos_' . $var_sess]; 
+} 
+
 
 add_image_size('product-thumbnail',300,300,true);
+add_image_size('banner-tienda',1400,400,true);
+add_image_size('banner-tienda-small',400,100,true);
 
 /**
  * Muestra un arreglo de forma amigable al usuario

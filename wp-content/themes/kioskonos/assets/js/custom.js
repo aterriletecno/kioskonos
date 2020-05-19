@@ -1,5 +1,14 @@
 $(document).ready(function(){
 
+    if( $(window).width() < 768 ){
+        $("#categoryTree").removeClass('in')
+    }
+
+    $(".btn-facebook-login").click(function(e){
+        e.preventDefault();
+        fbLogin();
+    })
+
     index = 0;
     setInterval(function(){ 
         max = $(".slider-home .item").length;
@@ -81,4 +90,42 @@ $(window).on("load",function(){
 
 $(window).on("resize",function(){
     $('#slider-home .item').height( $(window).height() )
+    if( $(window).width() < 768 ){
+        $("#categoryTree").removeClass('in')
+    } else {
+        $("#categoryTree").addClass('in')
+    }
 });
+
+
+alerta = function( options ) {
+    var settings = $.extend({
+        action: "open",
+        text: ""
+    }, options );
+
+    if( settings.action == 'open' ){
+        $(".alert_overlay, .alert_container").remove();
+        h = `
+        <div class="alert_overlay"></div>
+        <div class="alert_container">
+            <p>`+ settings.text +`</p>
+            <a href="javascript: alerta({ action:'close' });" class="btn btn-default btn-sm pull-right">Entendido!</a>
+        </div>
+        `;
+        $("body").append(h);
+        $("html, body").css({
+            'overflow' : 'hidden'
+        });
+        $(".alert_overlay, .alert_container").fadeIn(300);
+    } else {
+        $("html, body").css({
+            'overflow' : 'auto'
+        });
+        $(".alert_overlay, .alert_container").fadeOut(300, function() {
+            $(".alert_overlay, .alert_container").remove();
+        });
+    }
+
+}
+

@@ -123,6 +123,9 @@
 <!-- Custom JS -->
 <script src="<?php bloginfo('template_url') ?>/assets/js/custom.js?v=1.<?php echo uniqid(); ?>" type="text/javascript"></script>
 
+
+
+
 <?php wp_footer(); ?>
 
 </html>

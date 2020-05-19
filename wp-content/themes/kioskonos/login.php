@@ -1,16 +1,19 @@
 <?php
+@session_start();
 /**
- * Template Name: Registro
+ * Template Name: Login
  *
  */
+get_header(); 
 
-get_header(); ?>
+while (have_posts()) : the_post();
+?>
 
 <div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/registro-bg.jpg');">
 	<div class="container">
 		<div class="row title-row">
     		<div class="col-md-8 col-md-offset-2">
-                <h1 class="title">Registro</h1>
+                <h1 class="title">Acceder</h1>
             </div>
         </div>
     </div>
@@ -18,11 +21,10 @@ get_header(); ?>
 
 <div class="main main-raised">
 	<div class="container">
-        <div class="about-description text-center">
-        	<form class="form" method="" action="">
+        <div class="about-description text-center py-3">
+        	<form class="form" method="post" action="">
 	            <div class="row">
 					<div class="col-md-8 col-md-offset-2">
-						<h5 class="description pt-3">This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious, otherwise he wouldn't scroll to get here. Add a button if you want the user to see more.</h5>
 					</div>
 				</div>
 				<div class="row-centered">
@@ -31,7 +33,7 @@ get_header(); ?>
 	                        <a href="#" class="btn btn-facebook btn-round btn-facebook-login">
 	    						<i class="fa fa-facebook-square"></i> Entrar con Facebook
 	    					</a>
-	                        <h4> o puedes llenar los campos manualmente </h4>
+	                        <h4> o accede con tus datos: </h4>
 	                    </div>
 					</div>
 				</div>
@@ -39,23 +41,19 @@ get_header(); ?>
 					<div class="col-centered col-lg-6 col-md-12 col-xs-12">
 						<div class="input-group">
 							<span class="input-group-addon">
-								<i class="material-icons">face</i>
-							</span>
-							<input type="text" class="form-control" placeholder="Nombre completo...">
-						</div>
-
-						<div class="input-group">
-							<span class="input-group-addon">
 								<i class="material-icons">email</i>
 							</span>
-							<input type="text" class="form-control" placeholder="Email...">
+							<input type="email" class="form-control" placeholder="Email..." required>
 						</div>
 
 						<div class="input-group">
 							<span class="input-group-addon">
 								<i class="material-icons">lock_outline</i>
 							</span>
-							<input type="password" placeholder="Password..." class="form-control" />
+							<input type="password" placeholder="Password..." class="form-control" required />
+						</div>
+						<div class="text-center">
+							<button type="submit" class="btn btn-success">Acceder &nbsp; <i class="material-icons">forward</i></button>
 						</div>
 	            	</div>
 				</div>
@@ -64,4 +62,5 @@ get_header(); ?>
     </div>
 </div>
 
+<?php endwhile; ?>
 <?php get_footer(); ?>

@@ -83,27 +83,7 @@ $categorias = get_categories($args);
 
 <body <?php body_class() ?>>
 
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '{your-app-id}',
-      cookie     : true,
-      xfbml      : true,
-      version    : '{api-version}'
-    });
-      
-    FB.AppEvents.logPageView();   
-      
-  };
-
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "https://connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+<script src="<?php bloginfo('template_url') ?>/assets/js/fb-functions.js"></script>
 
 	<div class="top-bar">
 		<div class="container">
@@ -131,7 +111,7 @@ $categorias = get_categories($args);
         		<ul class="nav navbar-nav navbar-right">
     				<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<i class="fa fa-shopping-basket "></i> Tiendas
+							<i class="fa fa-shopping-basket"></i> Tiendas
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu dropdown-with-icons">
@@ -168,21 +148,38 @@ $categorias = get_categories($args);
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu dropdown-with-icons">
+							<?php if(session('loggged')): ?>
 							<li>
-								<a href=""> 
-									<i class="fa fa-user"></i> Perfil
+								<a href="<?php bloginfo('wpurl') ?>/usuarios/angelo-terrile"> 
+									<i class="material-icons">person</i> Mi Perfil
 								</a>
 							</li>
 							<li>
-								<a href=""> 
-									<i class="fa fa-power-off"></i> Salir
+								<a href="<?php bloginfo('wpurl') ?>/editar-tienda/?t=<?php echo session('tienda_id'); ?>"> 
+									<i class="material-icons">storefront</i> Mi Tienda
+								</a>
+							</li>
+							<li>
+								<a href="<?php bloginfo('wpurl') ?>/logout"> 
+									<i class="material-icons">power_settings_new</i> Salir
+								</a>
+							</li>
+
+							<?php else: ?>
+
+							<li>
+								<a href="<?php bloginfo('wpurl') ?>/login"> 
+									<i class="material-icons">fingerprint</i> Acceder
 								</a>
 							</li>
 							<li>
 								<a href="<?php bloginfo('wpurl') ?>/registro"> 
-									<i class="fa fa-id-card"></i> Registrarme
+									<i class="material-icons">person_add</i> Registrarme
 								</a>
 							</li>
+
+							<?php endif; ?>
+
 						</ul>
 					</li>
         		</ul>

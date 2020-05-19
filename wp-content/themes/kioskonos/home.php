@@ -6,6 +6,7 @@
 
 get_header(); ?>
 
+
 <div class="page-header header-filter" data-parallax="true">
 
 	<div class="owl-carousel" id="slider-home">
@@ -107,7 +108,7 @@ get_header(); ?>
 	</div>
 </div><!-- section -->
 
-<div class="subscribe-line subscribe-line-image" data-parallax="true"  style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/examples/ecommerce-header.jpg');">
+<div class="subscribe-line subscribe-line-image" data-parallax="true"  style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/news.jpg');">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
