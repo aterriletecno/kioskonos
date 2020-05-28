@@ -16,6 +16,10 @@ if( $_POST || session('logged') ):
 		}
 		header('Location: ' . $goto);
 		exit();
+	else:
+		$_SESSION['kioskonos_alert'] = 'Usuario no encontrado';
+		header('Location: ' . get_bloginfo('wpurl') . '/login' );
+		exit();
 	endif;
 endif;
 

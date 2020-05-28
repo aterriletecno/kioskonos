@@ -1,5 +1,33 @@
 $(document).ready(function(){
 
+    $(".btnAddFavoritos").click(function(){
+        $('.tooltip').hide();
+        $(this).find('.heart').toggleClass('active');
+        if( $(this).find('.heart').hasClass('active') == true ){ // Agregar
+            addFavorito( $(this).data('user_id'),$(this).data('product_id'),'add' );
+            $(this).attr('data-original-title','Quitar de favoritos');
+        } else {
+            addFavorito( $(this).data('user_id'),$(this).data('product_id'),'remove' ); //Quitar
+            $(this).attr('data-original-title','Agregar a favoritos');
+        }
+    })
+    $(".heart").on('click touchstart', function(){
+        $(this).toggleClass('is_animating');
+    });
+
+    /*when the animation is over, remove the class*/
+    $(".heart").on('animationend', function(){
+        $(this).toggleClass('is_animating');
+    });
+
+    $("a[href='#']").click(function(event){
+        event.preventDefault();
+    })
+
+    if( $(window).scrollTop() > 0 ){
+        $("nav.navbar").removeClass('navbar-transparent');
+    }
+
     $(".btn-pedir-whatsapp").click(function(event){
         event.preventDefault();
         whatsapp = $(this).data('whatsapp');
@@ -157,29 +185,68 @@ alerta = function( options ) {
 }
 
 
-addFavorito = function(prod_id,user_id){
+addFavorito = function(prod_id,user_id,method){
+
+    if (localStorage.getItem("kioskonos_favoritos" + user_id) === null) {
+        localStorage.setItem("kioskonos_favoritos" + user_id,"["+prod_id+"]");
+    } else {
+        product_items = localStorage.getItem("kioskonos_favoritos" + user_id);
+        json_product_items = JSON.parse(product_items);
+        json_product_items.push(prod_id);
+        console.log(json_product_items);
+    }
+
+
     return;
+
+    var fav_ids = [12,45,67,3];
+    var existe_fav = fav_ids.includes(12);
+
+    var kioskonos_favoritos = localStorage.getItem("kioskonos_favoritos");
+
+    console.log( kioskonos_favoritos );
+
     /*
     $.ajax({
         type: 'POST',
-        url: '<?php echo admin_url('admin-ajax.php'); ?>',
+        url: AJAX_URL,
         dataType: 'json',
-        data: 'action=get_favoritos&product_id=' + product_id,
+        data: {
+            'product_id' : prod_id,
+            'user_id' : user_id,
+            'method' : method
+        },
         beforeSend: function(){
         },
         success: function(json){
-            $("[name=product_id]").val( json.id );
-            $("[name=nombre]").val( json.title );
-            $("[name=descripcion]").val( json.descripcion );
-            $("[name=precio]").val( json.precio );
-            $("#product-thumbnail").attr( 'src',json.thumbnail );
-            $.each(json.categorias, function(k,v){
-                $("[name='categoria[]'][value=" + v.term_id + "]").prop('checked',true);
-            })
-            $("#addProductModal").modal('show');
+            alerta({text:'Favorito'});
         }
     })
     */
 }
 
 
+
+
+function recalcular(user_id){
+    total_productos = 0;
+    objCart = "[";
+    $(".card-product").each(function(){
+        heart = $(this).find('.heart');
+        button = $(this).find('.btnAddFavoritos');
+
+        if( heart.hasClass('active') ){
+            total_productos++;  
+            objCart += button.data('product_id') + ',';
+        }
+    });
+
+    if( total_productos > 0 ){
+        objCart = objCart.substring(0, objCart.length - 1);
+    }
+
+    objCart += "]";
+
+    sessionStorage.setItem('kioskonos_favoritos' + user_id, objCart);
+
+}

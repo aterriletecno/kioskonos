@@ -86,6 +86,7 @@
 <div class="overlay"></div>
 <div class="loader"><img src="<?php bloginfo('template_url') ?>/assets/img/logo_icon.png" class="flip-vertical-right"></div>
 
+
 </body>
 
 <!--   Core JS Files   -->
@@ -124,7 +125,16 @@
 <script src="<?php bloginfo('template_url') ?>/assets/js/custom.js?v=1.<?php echo uniqid(); ?>" type="text/javascript"></script>
 
 
-
+<?php if( $_SESSION['kioskonos_alert'] ): ?>
+<script>
+$(window).on("load",function(){
+	alerta({ text : '<?php echo $_SESSION['kioskonos_alert']; ?>' })	
+})
+</script>
+<?php 
+unset($_SESSION['kioskonos_alert']);
+endif; 
+?>
 
 <?php wp_footer(); ?>
 

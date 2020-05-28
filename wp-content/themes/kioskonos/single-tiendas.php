@@ -10,15 +10,47 @@ get_header();
 while (have_posts()) : the_post();
 $tienda_id = get_the_ID();
 $banner = get_field('banner');
+if( !is_array($banner) ){
+	$banner = wp_get_attachment_image_src($banner,'full');
+} else {
+	$banner = [$banner['url']];
+}
+$activa = get_field('activa');
+
+if( $activa ):
+
+$avatar = get_field('avatar');
+
 $args = [
 	'orderby' => 'id',
     'parent'  => 0,
     'hide_empty'=> true,
 ];
 $categorias = get_categories($args);
-$avatar = get_field('avatar');
+
+
+$categorias = [];
+$args = [
+	'meta_key' => 'tienda',
+	'meta_value' => $tienda_id,
+	'post_type' => 'productos',
+	'posts_per_page' => -1
+];
+$query = new WP_Query($args);
+while( $query->have_posts() ) : $query->the_post();
+	$post_categories = get_the_category();
+	foreach ($post_categories as $cat) {
+		if( !in_array($cat->cat_ID,$categorias) ){
+			$categorias[] = $cat->cat_ID;
+		}
+	}
+endwhile;
+wp_reset_query();
+
+
+
 ?>
-<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner['url'] ?>');">
+<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner[0] ?>');">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
@@ -64,12 +96,12 @@ $avatar = get_field('avatar');
 									<div class="panel-body category_list">
 										<?php 
 										foreach ($categorias as $category) { 
-										if($category->term_id != 1):
+										if($category != 1):
 										?>
 										<div class="checkbox">
 											<label>
-											   	<input type="checkbox" value="<?php echo $category->term_id; ?>" data-toggle="checkbox">
-												<?php echo $category->name ?>
+											   	<input type="checkbox" value="<?php echo $category; ?>" data-toggle="checkbox">
+												<?php echo get_cat_name($category); ?>
 											</label>
 										</div>
 										<?php 
@@ -119,8 +151,8 @@ $avatar = get_field('avatar');
 										</div>
 		                            	<div class="stats">
 		                            		<?php if(session('logged')): ?>
-											<button onclick="addFavorito(<?php echo get_the_ID(); ?>,<?php echo session('user_id'); ?>)" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
-												<i class="fa fa-heart-o"></i>
+											<button data-user_id="<?php echo session('user_id'); ?>" data-product_id="<?php echo get_the_ID(); ?>" type="button" rel="tooltip" title="<?php echo (isFav(session('user_id'),get_the_ID())) ? 'Quitar de' : 'Agregar a' ?> Favoritos" class="btn btn-just-icon btn-simple btn-rose btnAddFavoritos">
+												<div class="heart <?php echo (isFav(session('user_id'),get_the_ID())) ? 'active' : '' ?>"></div>
 											</button>
 											<?php else: ?>
 											<button onclick="javascript: alerta({text:'Debes estar registrado y acceder para guardar tus favoritos'})" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
@@ -155,6 +187,10 @@ $(".category_list input[type=checkbox]").change(function(){
 })
 
 </script>
+
+<?php else: ?>
+<script> window.location.href = '<?php bloginfo('wpurl'); ?>' </script>	
+<?php endif; ?>
 
 <?php endwhile; ?>
 <?php get_footer(); ?>

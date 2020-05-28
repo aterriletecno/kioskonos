@@ -9,7 +9,12 @@
 get_header();
 while (have_posts()) : the_post();
 $tienda = get_field('tienda');
-$banner = get_field('banner',$tienda);
+$banner = get_field('banner');
+if( !is_array($banner) ){
+    $banner = wp_get_attachment_image_src($banner,'full');
+} else {
+    $banner = [$banner['url']];
+}
 
 $gallery = get_field('galeria_de_fotos');
 if( !$gallery ){
@@ -18,7 +23,7 @@ if( !$gallery ){
 ?>
 
 
-<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner['url'] ?>');">
+<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner[0] ?>');">
 	<div class="container" style="padding-top: 13vh">
         <div class="row title-row">
             <div class="col-lg-12">

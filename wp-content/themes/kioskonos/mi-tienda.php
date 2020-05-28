@@ -4,13 +4,17 @@
  * Template Name: Mi Tienda
  *
  */
+
+
 $tienda_id = session('tienda_id');
+if( is_object($tienda_id) ){
+	$tienda_id = $tienda_id->ID;
+}
 
 if( session('logged') ){
 	
 	if( $_POST ){
 		
-		$tienda_id = getTiendaByUser(session('user_id'));
 		$status = 'publish';
 		if( !$tienda_id ){
 			$tienda_id = 0;
@@ -121,11 +125,14 @@ if( session('logged') ){
 	exit();
 	}
 
-
-
 } else {
 	header('Location: ' . get_bloginfo('wpurl') . '/login');
 	exit();
+}
+
+if( !$tienda_id ){
+	header('Location: ' . get_bloginfo('wpurl') );
+	exit();	
 }
 
 get_header();
@@ -137,9 +144,16 @@ $args = [
 $tienda = new WP_Query($args);
 while ( $tienda->have_posts() ) : $tienda->the_post();
 $banner = get_field('banner');
+if( !is_array($banner) ){
+	$banner = wp_get_attachment_image_src($banner,'full');
+} else {
+	$banner = [$banner['url']];
+}
+
+
 ?>
 
-<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner['url'] ?>');">
+<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner[0] ?>');">
 	<div class="container">
 		<div class="row title-row">
     		<div class="col-md-8 col-md-offset-2">
@@ -196,12 +210,22 @@ $banner = get_field('banner');
 												Datos de la tienda
 											<div class="ripple-container"></div></a>
 										</li>
+										<?php if( get_field('activa',$tienda_id) == 1 ): ?>
 										<li class="">
 											<a href="<?php bloginfo('wpurl') ?>/mi-tienda/mis-productos">
 												<i class="material-icons">local_offer</i>
 												Productos
 											<div class="ripple-container"></div></a>
 										</li>
+										<?php else: ?>
+										<li>
+											<a href="javascript: void(0)" class="disabled" data-toggle="tooltip" title="Primero debes activar tu tienda para poder agregar productos">
+												<i class="material-icons">local_offer</i>
+												Productos
+												<div class="ripple-container"></div>
+											</a>
+										</li>
+										<?php endif; ?>
 									</ul>
 								</div>
 							</div>
@@ -249,8 +273,13 @@ $banner = get_field('banner');
 													<?php 
 													if( get_field('banner',$tienda_id) ): 
 													$banner = get_field('banner',$tienda_id);
+													if( !is_array($banner) ){
+														$banner = wp_get_attachment_image_src($banner,'full');
+													} else {
+														$banner = [$banner['url']];
+													}
 													?>
-														<img src="<?php echo $banner['url'] ?>" id="previewBanner" class="img-responsive">
+														<img src="<?php echo $banner[0] ?>" id="previewBanner" class="img-responsive">
 													<?php else: ?>
 														<img src="https://via.placeholder.com/468x100?text=Imagen%20horizontal%20%20de%201200x400%20Aprox." id="previewBanner" class="img-responsive">
 													<?php endif; ?>
@@ -307,7 +336,7 @@ $banner = get_field('banner');
 													<span class="input-group-addon">
 														<i class="material-icons">email</i>
 													</span>
-													<input type="email" name="email" class="form-control" placeholder="Email..." value="<?php the_field('email') ?>" required>
+													<input type="email" name="email" class="form-control" placeholder="Email..." value="<?php echo( get_field('email') ) ? get_field('email') : session('email'); ?>" required>
 												</div>
 												<div class="input-group">
 													<span class="input-group-addon">

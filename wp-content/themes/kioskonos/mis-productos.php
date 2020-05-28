@@ -5,6 +5,9 @@
  *
  */
 $tienda_id = session('tienda_id');
+if( is_object($tienda_id) ){
+	$tienda_id = $tienda_id->ID;
+}
 
 if( session('logged') ){
 
@@ -108,10 +111,15 @@ $args = [
 $tienda = new WP_Query($args);
 while ( $tienda->have_posts() ) : $tienda->the_post();
 $banner = get_field('banner');
+if( !is_array($banner) ){
+	$banner = wp_get_attachment_image_src($banner,'full');
+} else {
+	$banner = [$banner['url']];
+}
 ?>
 
 <div class="mis-productos">
-	<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner['url'] ?>');">
+	<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner[0] ?>');">
 		<div class="container">
 			<div class="row title-row">
 	    		<div class="col-md-8 col-md-offset-2">
@@ -160,7 +168,7 @@ $banner = get_field('banner');
 												<div class="ripple-container"></div></a>
 											</li>
 											<li class="active">
-												<a href="<?php bloginfo('wpurl') ?>/mi-tienda/mis-productos">
+												<a href="#">
 													<i class="material-icons">local_offer</i>
 													Productos
 												<div class="ripple-container"></div></a>
@@ -299,9 +307,9 @@ $banner = get_field('banner');
 									<i class="material-icons">attach_file</i>
 								</span>
 		                    	<div class="form-group form-file-upload">
-									<input type="file" id="foto_producto" name="foto_producto" onchange="loadFile(event,'product-thumbnail')" required>
+									<input type="file" id="foto_producto" name="foto_producto" onchange="loadFile(event,'product-thumbnail')">
 									<div class="input-group">
-										<input type="text" readonly="" class="form-control" placeholder="Elije una foto..." required>
+										<input type="text" readonly="" class="form-control" placeholder="Elije una foto...">
 										<span class="input-group-btn input-group-s">
 											<button type="button" class="btn btn-just-icon btn-round btn-primary">
 												<i class="material-icons">insert_photo</i>

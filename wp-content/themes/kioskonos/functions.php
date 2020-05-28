@@ -14,8 +14,11 @@ function isTiendaActiva($tienda_id){
 
 function isMyTienda($tienda_id){
     $tienda_usuario = get_field('tienda',session('user_id'));
-    if( $tienda_id != $tienda_usuario->ID ){
-        $_SESSION['kioskonos_tienda_id'] = $tienda_usuario->ID;
+    if( is_object($tienda_usuario) ){
+        $tienda_usuario = $tienda->ID;
+    }
+    if( $tienda_id != $tienda_usuario ){
+        $_SESSION['kioskonos_tienda_id'] = $tienda_usuario;
         return false;
     } else {
         return true;
@@ -38,7 +41,10 @@ function getTiendaByUser($user_id){
     if( !$tienda_usuario ){
         return false;
     } else {
-        return $tienda_usuario->ID;
+        if( is_object($tienda_usuario) ){
+            $tienda_usuario = $tienda_usuario->ID;
+        }
+        return $tienda_usuario;
     }
 }
 
@@ -48,6 +54,9 @@ function getTiendaByProduct($product_id){
     if( !$tienda_producto ){
         return false;
     } else {
+        if( is_object($tienda_producto) ){
+            $tienda_producto = $tienda->ID;
+        }
         return $tienda_producto;
     }
 }
@@ -59,6 +68,32 @@ function logout(){
     unset($_SESSION['kioskonos_nombre_completo']);
     unset($_SESSION['kioskonos_email']);
     unset($_SESSION['kioskonos_tienda_id']);
+}
+
+
+function getUserByEmail($email){
+    $user_args = array( 
+        'post_type'  => 'usuarios',
+        'meta_key' => 'email',
+        'meta_value' => $email
+    ); 
+
+    $user = new WP_Query( $user_args );
+    if($user->found_posts > 0){
+        $return_data = [];
+        while( $user->have_posts() ) : $user->the_post();
+            $tienda = get_field('tienda',get_the_ID());
+            $return_data = [
+                'user_id' => get_the_ID(),
+                'nombre_completo' => get_the_title( get_the_ID() ),
+                'email' => get_field('email',get_the_ID()),
+                'tienda_id' => $tienda->ID
+            ];
+        endwhile;
+        return $return_data;
+    } else {
+        return false;
+    }
 }
 
 
@@ -106,18 +141,21 @@ function checkValidUser($email="", $pass=""){
             $user = [];
             while( $valid_user->have_posts() ) : $valid_user->the_post();
                 $tienda = get_field('tienda',get_the_ID());
+                if( is_object($tienda) ){
+                    $tienda = $tienda->ID;
+                }
 
                 $_SESSION['kioskonos_logged'] = true;
                 $_SESSION['kioskonos_user_id'] = get_the_ID();
                 $_SESSION['kioskonos_nombre_completo'] = get_the_title( get_the_ID() );
                 $_SESSION['kioskonos_email'] = get_field('email',get_the_ID());
-                $_SESSION['kioskonos_tienda_id'] = $tienda->ID;
+                $_SESSION['kioskonos_tienda_id'] = $tienda;
 
                 $user = [
                     'user_id' => get_the_ID(),
                     'nombre_completo' => get_the_title( get_the_ID() ),
                     'email' => get_field('email',get_the_ID()),
-                    'tienda_id' => $tienda->ID
+                    'tienda_id' => $tienda
                 ];
             endwhile;
 
@@ -199,6 +237,16 @@ function ns_function_encrypt_passwords( $value, $post_id, $field  )
 add_filter('acf/update_value/type=password', 'ns_function_encrypt_passwords', 10, 3);
 
 
+function isFav($user_id,$product_id){
+    global $wpdb;
+    $sql = "SELECT * FROM favoritos WHERE user_id = $user_id AND product_id = $product_id";
+    $fav = $wpdb->get_row($sql);
+    if( $fav ){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 
 /********************************************************
@@ -240,6 +288,38 @@ function get_producto(){
         $product_result['precio'] = get_field('precio',get_the_ID());
         $product_result['categorias'] = get_the_category(get_the_ID());
     endwhile;
+
+    echo json_encode($product_result);
+    exit();  
+}
+
+
+
+
+add_action('wp_ajax_register_user','register_user');
+function register_user(){
+    
+    $user = checkValidUser($_POST['email'],$_POST['password']);
+    if($user):
+        if( $_GET['redirect'] ){
+            $goto = urldecode($_GET['redirect']);
+        } else {
+            $goto = get_bloginfo('wpurl') . '/mi-tienda/';
+        }
+        header('Location: ' . $goto);
+        exit();
+    endif;
+
+    echo json_encode($product_result);
+    exit();  
+}
+
+
+
+add_action('wp_ajax_fav','fav');
+function fav(){
+    
+    
 
     echo json_encode($product_result);
     exit();  

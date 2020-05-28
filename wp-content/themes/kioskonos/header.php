@@ -10,6 +10,12 @@
  * @since Spoerer Valdes 1.0
  */
 
+//Por si se elimina un usuario que aun esta logueado
+$valid_user = getUserByEmail(session('email'));
+if( session('logged') && !$valid_user ){
+	header('Location: ' . get_bloginfo('wpurl') . '/logout');
+	exit();
+}
 
 $args = [
 	'posts_per_page' => -1,
@@ -83,6 +89,8 @@ $categorias = get_categories($args);
     <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.min.js" type="text/javascript"></script>
     <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.konfirm.js"></script>
 
+    <script> AJAX_URL = '<?php echo admin_url('admin-ajax.php') ?>'</script>
+
 </head>
 
 <body <?php body_class() ?>>
@@ -92,7 +100,7 @@ $categorias = get_categories($args);
 	<div class="top-bar">
 		<div class="container">
 			<div class="text-right">
-				<a href=""> <i class="fa fa-info-circle"></i> Terminos y condiciones</a>
+				<a href="<?php bloginfo('wpurl') ?>/terminos-y-condiciones"> <i class="fa fa-info-circle"></i> Terminos y condiciones</a>
 				<a href=""> <i class="fa fa-usd"></i> Precios</a>
 				<a href=""> <i class="fa fa-envelope-o"></i> Contacto</a>
 			</div>
@@ -156,12 +164,16 @@ $categorias = get_categories($args);
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle btn btn-round btn-success" data-toggle="dropdown">
 							<i class="fa fa-user"></i>
+							<?php 
+							$username = explode(' ',session('nombre_completo'));
+							echo(session('logged') ? $username[0] : ''); 
+							?>
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu dropdown-with-icons">
 							<?php if(session('logged')): ?>
 							<li>
-								<a href="<?php bloginfo('wpurl') ?>/usuarios/angelo-terrile"> 
+								<a href="<?php bloginfo('wpurl') ?>/?post_type=usuarios&p=<?php echo session('user_id'); ?>"> 
 									<i class="material-icons">person</i> Mi Perfil
 								</a>
 							</li>
