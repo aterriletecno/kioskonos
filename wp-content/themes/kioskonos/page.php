@@ -12,21 +12,33 @@
  * @since Twenty Ten 1.0
  */
 
-get_header(); ?>
+get_header(); 
+while( have_posts() ) : the_post();
+?>
+<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/store.jpg');">
+		<div class="container">
+    		<div class="row">
+        		<div class="col-md-8 col-md-offset-2">
+                    <h1 class="title"><?php the_title(); ?></h1>
+                </div>
+            </div>
+        </div>
+	</div>
 
-		<div id="container">
-			<div id="content" role="main">
+	<div class="main main-raised">
+		<div class="container">
+            
+            <div class="about-team team-1">
+    			<div class="row">
+    				<div class="col-md-8 col-md-offset-2">
+    					<div class="the_content">
+	    					<?php the_content(); ?>
+	    				</div>
+    				</div>
+    			</div>
+            </div>
+        </div>
+    </div>
 
-			<?php
-			/* Run the loop to output the page.
-			 * If you want to overload this in a child theme then include a file
-			 * called loop-page.php and that will be used instead.
-			 */
-			get_template_part( 'loop', 'page' );
-			?>
-
-			</div><!-- #content -->
-		</div><!-- #container -->
-
-<?php get_sidebar(); ?>
+<?php endwhile; ?>
 <?php get_footer(); ?>

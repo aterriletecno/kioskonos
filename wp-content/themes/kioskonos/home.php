@@ -89,20 +89,27 @@ get_header(); ?>
 
 <div class="section section-blog">
 	<div class="container pb-5">
-		<h2 class="section-title">Marcas</h2>
+		<h2 class="section-title">Tiendas</h2>
 		<div class="row">
 			<div class="owl-carousel" id="carousel-marcas">
-			<?php for ($i=1; $i <= 9 ; $i++) { ?>
+			<?php 
+			$args = [
+				'posts_per_page' => -1,
+				'post_type' => 'tiendas'
+			];
+			$tiendas = new WP_Query($args);
+			while ($tiendas->have_posts()) : $tiendas->the_post();
+			?>
 				<div style="padding: 0 30px">
 				<div class="card card-product">
 					<div class="card-content">
-						<a href="">
-							<img src="<?php bloginfo('template_url') ?>/assets/img/logos/logo<?php echo $i; ?>.png">
+						<a href="<?php the_permalink(); ?>">
+							<?php the_post_thumbnail('product-thumbnail') ?>
 						</a>
 					</div>
 				</div>
 				</div>
-			<?php } ?>
+			<?php endwhile; ?>
 		</div>
 
 	</div>

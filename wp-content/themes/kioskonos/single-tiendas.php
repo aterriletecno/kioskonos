@@ -13,7 +13,7 @@ $banner = get_field('banner');
 $args = [
 	'orderby' => 'id',
     'parent'  => 0,
-    'hide_empty'=> false
+    'hide_empty'=> true,
 ];
 $categorias = get_categories($args);
 $avatar = get_field('avatar');
@@ -61,15 +61,21 @@ $avatar = get_field('avatar');
 									<div class="clearfix"></div>
 								</div>
 								<div id="categoryTree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">
-									<div class="panel-body">
-										<?php foreach ($categorias as $category) { ?>
+									<div class="panel-body category_list">
+										<?php 
+										foreach ($categorias as $category) { 
+										if($category->term_id != 1):
+										?>
 										<div class="checkbox">
 											<label>
 											   	<input type="checkbox" value="<?php echo $category->term_id; ?>" data-toggle="checkbox">
 												<?php echo $category->name ?>
 											</label>
 										</div>
-										<?php } ?>
+										<?php 
+										endif;
+										} 
+										?>
 								   </div>
 							   </div>
 						   </div>
@@ -112,9 +118,15 @@ $avatar = get_field('avatar');
 											<h4><?php the_field('precio') ?></h4>
 										</div>
 		                            	<div class="stats">
+		                            		<?php if(session('logged')): ?>
+											<button onclick="addFavorito(<?php echo get_the_ID(); ?>,<?php echo session('user_id'); ?>)" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
+												<i class="fa fa-heart-o"></i>
+											</button>
+											<?php else: ?>
 											<button onclick="javascript: alerta({text:'Debes estar registrado y acceder para guardar tus favoritos'})" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
 												<i class="fa fa-heart-o"></i>
 											</button>
+											<?php endif; ?>
 		                            	</div>
 		                            </div>
 
@@ -135,6 +147,14 @@ $avatar = get_field('avatar');
 
 </div> <!-- end-main-raised -->
 
+
+<script>
+	
+$(".category_list input[type=checkbox]").change(function(){
+	console.log( $(this).prop('checked') );
+})
+
+</script>
 
 <?php endwhile; ?>
 <?php get_footer(); ?>

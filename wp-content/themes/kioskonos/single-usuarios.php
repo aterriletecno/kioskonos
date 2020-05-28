@@ -8,6 +8,7 @@
  */
 get_header();
 while (have_posts()) : the_post();
+if( get_the_ID() == session('user_id') ):
 ?>
 
 <div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/registro-bg.jpg');">
@@ -74,6 +75,14 @@ while (have_posts()) : the_post();
 	</div>
 </div>
 
+<?php  
+else:
+?>
+<script>window.location.href="<?php bloginfo('wpurl'); ?>"</script>
+<?php
+	exit();
+endif;
+?>
 
 <?php endwhile; ?>
 <?php get_footer(); ?>

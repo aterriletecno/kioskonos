@@ -1,5 +1,18 @@
 $(document).ready(function(){
 
+    $(".btn-pedir-whatsapp").click(function(event){
+        event.preventDefault();
+        whatsapp = $(this).data('whatsapp');
+        title = $(this).data('title');
+        if($("[name=despacho]").val() == "Si"){
+            despacho = 'con'
+        } else {
+            despacho = 'sin'
+        }
+        link = 'https://wa.me/'+whatsapp+'?text=Hola%21%20Me%20gustaría%20pedir%20' + $("[name=cuantos_quieres]").val() + '%20' + title + '%20que%20vi%20en%20kioskonos.cl,%20' + despacho + '%20despacho%20a%20domicilio,%20por%20favor';
+        window.open(link);
+    })
+
     $("img").each(function(){
         $(this).attr('srcset','');
         $(this).attr('sizes','');
@@ -10,6 +23,7 @@ $(document).ready(function(){
             $(".alert_overlay, .alert_container").fadeOut(300, function() {
                 $(".alert_overlay, .alert_container").remove();
             });
+            $.confirm.hide();
         }
     });
 
@@ -123,7 +137,7 @@ alerta = function( options ) {
         <div class="alert_overlay"></div>
         <div class="alert_container">
             <p>`+ settings.text +`</p>
-            <a href="javascript: alerta({ action:'close' });" class="btn btn-default btn-sm pull-right">Entendido!</a>
+            <a href="javascript: alerta({ action:'close' });" class="btn btn-default pull-right">Entendido!</a>
         </div>
         `;
         $("body").append(h);
@@ -141,4 +155,31 @@ alerta = function( options ) {
     }
 
 }
+
+
+addFavorito = function(prod_id,user_id){
+    return;
+    /*
+    $.ajax({
+        type: 'POST',
+        url: '<?php echo admin_url('admin-ajax.php'); ?>',
+        dataType: 'json',
+        data: 'action=get_favoritos&product_id=' + product_id,
+        beforeSend: function(){
+        },
+        success: function(json){
+            $("[name=product_id]").val( json.id );
+            $("[name=nombre]").val( json.title );
+            $("[name=descripcion]").val( json.descripcion );
+            $("[name=precio]").val( json.precio );
+            $("#product-thumbnail").attr( 'src',json.thumbnail );
+            $.each(json.categorias, function(k,v){
+                $("[name='categoria[]'][value=" + v.term_id + "]").prop('checked',true);
+            })
+            $("#addProductModal").modal('show');
+        }
+    })
+    */
+}
+
 

@@ -9,12 +9,12 @@
 get_header();
 while (have_posts()) : the_post();
 $tienda = get_field('tienda');
-$banner = get_field('banner',$tienda->ID);
+$banner = get_field('banner',$tienda);
+
 $gallery = get_field('galeria_de_fotos');
 if( !$gallery ){
     $gallery = [['url'=>get_the_post_thumbnail_url(get_the_ID(),'full')]];
 }
-
 ?>
 
 
@@ -23,7 +23,7 @@ if( !$gallery ){
         <div class="row title-row">
             <div class="col-lg-12">
 				<h2 class="title text-center">
-					<?php echo get_the_title($tienda->ID); ?>
+					<?php echo get_the_title($tienda); ?>
 				</h2>
             </div>
         </div>
@@ -90,7 +90,7 @@ if( !$gallery ){
 		            <div class="row pick-size">
                         <div class="col-md-6 col-sm-6">
                             <label>¿Cuántos quieres?</label>
-							<select class="selectpicker" data-style="select-with-transition" data-size="7">
+							<select class="selectpicker" name="cuantos_quieres" data-style="select-with-transition" data-size="7">
 								<?php for($i=1;$i<=20;$i++): ?>
 								<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
 								<?php endfor; ?>
@@ -99,24 +99,29 @@ if( !$gallery ){
                         </div>
                         <div class="col-md-6 col-sm-6">
                             <label>¿Quieres con despacho a domicilio?</label>
-							<select class="selectpicker" data-style="select-with-transition" data-size="7">
+							<select class="selectpicker" name="despacho" data-style="select-with-transition" data-size="7">
 								<option value="Si">Si </option>
 								<option value="No">No</option>
 							</select>
                         </div>
                     </div>
                     <div class="row text-right">
-                    	<a href="#" class="btn btn-rose btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Agregar a Favoritos">
-                    		<span class="hidden-md hidden-lg">Agregar a favoritos &nbsp; </span><i class="fa fa-heart"></i>
-                    	</a>
-
+                    	<?php if(session('logged')): ?>
+                        <a href="#" class="btn btn-rose btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Agregar a Favoritos">
+                            <span class="hidden-md hidden-lg">Agregar a favoritos &nbsp; </span><i class="fa fa-heart"></i>
+                        </a>
                         <span  class="pl-2"><strong>Pedir:</strong></span>
                     	<a href="https://m.me/aterrile" class="btn btn-facebook btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Pedir por Facebook Messenger" target="_blank">
 						    <span class="hidden-md hidden-lg">Pedir por Messenger &nbsp; </span><i class="fa fa-facebook"></i>
 					 	</a>
-                        <a href="https://wa.me/56933979873?text=Hola%21%20Me%20gustaría%20consultar%20por%20un%20producto" class="btn btn-success btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Pedir por WhatsApp" target="_blank">
+                        <a href="#" class="btn btn-success btn-round btn-tooltip btn-pedir-whatsapp" data-title="<?php the_title(); ?>" data-whatsapp="<?php echo str_replace('+','',get_field('whatsapp',$tienda)) ?>" data-toggle="tooltip" data-placement="top" title="Pedir por WhatsApp" target="_blank">
                         	<span class="hidden-md hidden-lg">Pedir por Whatsapp &nbsp; </span><i class="fa fa-whatsapp"></i>
                         </a>
+                        <?php else: ?>
+                        <a href="<?php bloginfo('wpurl'); ?>/login/?redirect=<?php echo urlencode(get_permalink()) ?>" class="btn btn-rose btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Ingresa o registrate">
+                            Ingresa para poder pedir
+                        </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -125,11 +130,11 @@ if( !$gallery ){
 		<div class="related-products">
 			<h3 class="title text-center">Otros productos de la tienda:</h3>
 
-			<div class="row row-centered">
+			<div class="row">
 				<?php  
                 $args = [
                     'meta_key' => 'tienda',
-                    'meta_value' => $tienda->ID,
+                    'meta_value' => $tienda,
                     'post_type' => 'productos',
                     'posts_per_page' => 4,
                     'orderby' => 'rand'
@@ -137,7 +142,7 @@ if( !$gallery ){
                 $query = new WP_Query($args);
                 while( $query->have_posts() ) : $query->the_post();
                 ?>
-				<div class="col-sm-6 col-md-3 col-centered">
+				<div class="col-sm-6 col-md-3">
 					<div class="card card-product">
 						<div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
 							<a href="<?php the_permalink() ?>">

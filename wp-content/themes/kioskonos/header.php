@@ -13,6 +13,8 @@
 
 $args = [
 	'posts_per_page' => -1,
+	'meta_key' => 'activa',
+	'meta_value' => true,
 	'post_type' => 'tiendas'
 ];
 $tiendas = new WP_Query($args);
@@ -79,6 +81,7 @@ $categorias = get_categories($args);
     <?php wp_head(); ?>
 
     <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.min.js" type="text/javascript"></script>
+    <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.konfirm.js"></script>
 
 </head>
 
@@ -112,7 +115,7 @@ $categorias = get_categories($args);
         		<ul class="nav navbar-nav navbar-right">
     				<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<i class="fa fa-shopping-basket"></i> Tiendas
+							<i class="material-icons">storefront</i> Tiendas
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu dropdown-with-icons">
@@ -138,10 +141,17 @@ $categorias = get_categories($args);
 						</ul>
 					</li>
 
-					<li class="button-container">
-						<a href="http://www.creative-tim.com/buy/material-kit-pro?ref=presentation" target="_blank" class="">
+					<li class="button-container dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-heart"></i><span class="badge">5</span>
 						</a>
+						<ul class="dropdown-menu dropdown-with-icons">
+							<li>
+								<a href="">
+									sadas
+								</a>
+							</li>
+						</ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle btn btn-round btn-success" data-toggle="dropdown">
@@ -156,7 +166,7 @@ $categorias = get_categories($args);
 								</a>
 							</li>
 							<li>
-								<a href="<?php bloginfo('wpurl') ?>/editar-tienda/?t=<?php echo session('tienda_id'); ?>"> 
+								<a href="<?php bloginfo('wpurl') ?>/mi-tienda/"> 
 									<i class="material-icons">storefront</i> Mi Tienda
 								</a>
 							</li>

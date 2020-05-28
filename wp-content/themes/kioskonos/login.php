@@ -6,9 +6,15 @@
  */
 
 if( $_POST || session('logged') ):
+
 	$user = checkValidUser($_POST['email'],$_POST['password']);
 	if($user):
-		header('Location: ' . get_bloginfo('wpurl') . '/editar-tienda/?t=' . session('tienda_id'));
+		if( $_GET['redirect'] ){
+			$goto = urldecode($_GET['redirect']);
+		} else {
+			$goto = get_bloginfo('wpurl') . '/mi-tienda/';
+		}
+		header('Location: ' . $goto);
 		exit();
 	endif;
 endif;
@@ -63,6 +69,8 @@ while (have_posts()) : the_post();
 						</div>
 						<div class="text-center">
 							<button type="submit" class="btn btn-success">Acceder &nbsp; <i class="material-icons">forward</i></button>
+							<br><br>
+							<a href="<?php bloginfo('wpurl') ?>/registro">o Registrarme</a>
 						</div>
 	            	</div>
 				</div>

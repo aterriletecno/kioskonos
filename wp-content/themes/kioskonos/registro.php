@@ -4,7 +4,17 @@
  *
  */
 
-get_header(); ?>
+if( session('logged') ):
+	$user = checkValidUser($_POST['email'],$_POST['password']);
+	if($user):
+		header('Location: ' . get_bloginfo('wpurl') . '/mi-tienda/');
+		exit();
+	endif;
+endif;
+
+get_header(); 
+
+?>
 
 <div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/registro-bg.jpg');">
 	<div class="container">

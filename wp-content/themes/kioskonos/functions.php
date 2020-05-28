@@ -1,6 +1,16 @@
 <?php
+
 @session_start();
 
+
+function isTiendaActiva($tienda_id){
+    $tienda_activa = get_field('activa',$tienda_id);
+    if( $tienda_activa ){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 function isMyTienda($tienda_id){
     $tienda_usuario = get_field('tienda',session('user_id'));
@@ -9,6 +19,36 @@ function isMyTienda($tienda_id){
         return false;
     } else {
         return true;
+    }
+}
+
+function isMyProduct($product_id){
+    $tienda_producto = getTiendaByProduct($product_id);
+    $tienda_usuario = getTiendaByUser(session('user_id'));
+
+    if($tienda_producto == $tienda_usuario){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getTiendaByUser($user_id){
+    $tienda_usuario = get_field('tienda',session('user_id'));
+    if( !$tienda_usuario ){
+        return false;
+    } else {
+        return $tienda_usuario->ID;
+    }
+}
+
+
+function getTiendaByProduct($product_id){
+    $tienda_producto = get_field('tienda',$product_id);
+    if( !$tienda_producto ){
+        return false;
+    } else {
+        return $tienda_producto;
     }
 }
 
@@ -157,3 +197,52 @@ function ns_function_encrypt_passwords( $value, $post_id, $field  )
     return $value;
 }
 add_filter('acf/update_value/type=password', 'ns_function_encrypt_passwords', 10, 3);
+
+
+
+
+/********************************************************
+* FUNCIONES AJAX
+*********************************************************/
+add_action('wp_ajax_eliminar_producto','eliminar_producto');
+function eliminar_producto(){
+    if( isMyProduct($_POST['product_id']) ){
+        $post_delete = wp_delete_post($_POST['product_id']);
+        if( $post_delete ){
+            $json = ['status' => 'OK'];
+        } else {
+            $json = ['status' => 'FAILURE'];
+        }
+    } else {
+        $json = ['status' => 'Access denied for product'];
+    }
+
+    echo json_encode($json);
+    exit();  
+}
+
+
+add_action('wp_ajax_get_producto','get_producto');
+function get_producto(){
+    
+    $args = [
+        'post_type' => 'productos',
+        'p' => $_POST['product_id']
+    ];
+
+    $product_result = [];
+    $producto = new WP_Query($args);
+    while( $producto->have_posts() ) : $producto->the_post();
+        $product_result['id'] = get_the_ID();
+        $product_result['title'] = get_the_title();
+        $product_result['descripcion'] = nl2br(strip_tags(get_the_content()));
+        $product_result['thumbnail'] = get_the_post_thumbnail_url( get_the_ID(), 'product-thumbnail' );
+        $product_result['precio'] = get_field('precio',get_the_ID());
+        $product_result['categorias'] = get_the_category(get_the_ID());
+    endwhile;
+
+    echo json_encode($product_result);
+    exit();  
+}
+
+

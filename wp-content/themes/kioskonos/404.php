@@ -8,23 +8,29 @@
  */
 
 get_header(); ?>
+<div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/lost.png');">
+	<div class="container">
+		<div class="row title-row">
+    		<div class="col-md-8 col-md-offset-2">
+                <h1 class="title">¿Perdido?</h1>
+            </div>
+        </div>
+    </div>
+</div>
 
-	<div id="container">
-		<div id="content" role="main">
-
-			<div id="post-0" class="post error404 not-found">
-				<h1 class="entry-title"><?php _e( 'Not Found', 'twentyten' ); ?></h1>
-				<div class="entry-content">
-					<p><?php _e( 'Apologies, but the page you requested could not be found. Perhaps searching will help.', 'twentyten' ); ?></p>
-					<?php get_search_form(); ?>
-				</div><!-- .entry-content -->
-			</div><!-- #post-0 -->
-
-		</div><!-- #content -->
-	</div><!-- #container -->
-	<script type="text/javascript">
-		// focus on search field after it has loaded
-		document.getElementById('s') && document.getElementById('s').focus();
-	</script>
-
+<div class="main main-raised">
+	<div class="container">
+        <div class="about-description text-center">
+            <div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<h5 class="description pt-4">La página que buscas no existe o ya no se encuentra diponible. <br>
+					Intenta navegar usando el menu principal o el buscador. Tambien puedes ir a la pagina principal del sitio.</h5>
+					<a href="<?php bloginfo('wpurl'); ?>" class="btn btn-round btn-success mb-5">
+						Ir al inicio
+					</a>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
 <?php get_footer(); ?>
