@@ -126,7 +126,7 @@ get_header();
 <div class="main main-raised">
 	<div class="container">
         <div class="about-description text-center">
-        	<form class="form" method="post" action="">
+        	<form class="form" method="post" action="" id="register-form">
 	            <div class="row">
 					<div class="col-md-8 col-md-offset-2">
 						<h5 class="description pt-3">This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious, otherwise he wouldn't scroll to get here. Add a button if you want the user to see more.</h5>
@@ -148,21 +148,29 @@ get_header();
 							<span class="input-group-addon">
 								<i class="material-icons">face</i>
 							</span>
-							<input type="text" name="nombre" class="form-control" placeholder="Nombre completo...">
+							<input type="text" name="nombre" class="form-control" placeholder="Nombre completo..." required>
 						</div>
 
 						<div class="input-group">
 							<span class="input-group-addon">
 								<i class="material-icons">email</i>
 							</span>
-							<input type="email" name="email" class="form-control" placeholder="Email...">
+							<input type="email" name="email" class="form-control" placeholder="Email..." required>
 						</div>
 
 						<div class="input-group">
 							<span class="input-group-addon">
 								<i class="material-icons">lock_outline</i>
 							</span>
-							<input type="password" name="password" placeholder="Password..." class="form-control" />
+							<input type="password" name="password" placeholder="Password..." class="form-control"  required />
+						</div>
+						<div class="input-group">
+							<div class="checkbox ml-2">
+								<label>
+									<input type="checkbox" name="terminos">
+									Acepto los <a href="<?php bloginfo('wpurl') ?>/terminos-y-condiciones" target="_blank"> Términos y condiciones</a>
+								</label>
+							</div>
 						</div>
 						<div class="text-center pb-5">
 							<button type="submit" class="btn btn-success">Registrarme &nbsp; <i class="material-icons">forward</i></button>

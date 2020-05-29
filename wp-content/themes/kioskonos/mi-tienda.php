@@ -249,7 +249,7 @@ if( !is_array($banner) ){
 								<div class="datos_tienda" style="display: <?php echo (get_field('activa',$tienda_id)) ? 'block' : 'none'; ?>">
 	            					<div class="row pb-3">
 										<div class="col-lg-6 col-md-12 col-xs-12">
-											<div class="px-3">
+											<div class="px-0 px-xl-3 px-lg-3">
 												
 
 												<div class="input-group">

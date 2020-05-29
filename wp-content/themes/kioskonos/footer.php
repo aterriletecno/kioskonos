@@ -6,40 +6,52 @@
 		<div class="content">
 			<div class="row">
 				<div class="col-md-4">
-					<h5>About Us</h5>
-					<p>Creative Tim is a startup that creates design tools that make the web development process faster and easier. </p> <p>We love the web and care deeply for how users interact with a digital product. We power businesses and individuals to create better looking web projects around the world. </p>
+					<h5>KioskoNOS</h5>
+					<p>
+						Somos un sitio "multi tiendas" creado pensando en los pequeños emprendedores, con la finalidad de ayudarlos a vender sus productos. Principalmente para los usuarios del sector NOS de San Bernardo. <br>
+						Eres libre de registrarte si no eres de San Bernardo, pero eres responsable de las ventas que puedas realizar fuera de los limites geográficos. <br>
+						Disfruta KioskoNOS
+					</p>
 				</div>
 
 				<div class="col-md-4">
-					<h5>Social Feed</h5>
+					<h5>Redes Sociales</h5>
 					<div class="social-feed">
 						<div class="feed-line">
-							<i class="fa fa-twitter"></i>
-							<p>How to handle ethical disagreements with your clients.</p>
+							<p>
+								<a href="javascript: alerta({text:'Pronto!'})"><i class="fa fa-twitter"></i> &nbsp; Twitter (Pronto)</a>
+							</p>
 						</div>
 						<div class="feed-line">
-							<i class="fa fa-twitter"></i>
-							<p>The tangible benefits of designing at 1x pixel density.</p>
+							<p>
+								<a href="javascript: alerta({text:'Pronto!'})"><i class="fa fa-facebook-square"></i> &nbsp; Facebook (Pronto)</a>
+							</p>
 						</div>
 						<div class="feed-line">
-							<i class="fa fa-facebook-square"></i>
-							<p>A collection of 25 stunning sites that you can use for inspiration.</p>
+							<p>
+								<a href="javascript: alerta({text:'Pronto!'})"><i class="fa fa-instagram"></i> &nbsp; Instagram (Pronto)</a>
+							</p>
 						</div>
 					</div>
 				</div>
 
 				<div class="col-md-4">
-					<h5>Instagram Feed</h5>
+					<h5>InstaTiendas Feed</h5>
 					<div class="gallery-feed">
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/card-profile6-square.jpg" class="img img-raised img-rounded" alt="" />
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/christian.jpg" class="img img-raised img-rounded" alt="" />
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/card-profile4-square.jpg" class="img img-raised img-rounded" alt="" />
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/card-profile1-square.jpg" class="img img-raised img-rounded" alt="" />
-
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/marc.jpg" class="img img-raised img-rounded" alt="" />
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/kendall.jpg" class="img img-raised img-rounded" alt="" />
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/card-profile5-square.jpg" class="img img-raised img-rounded" alt="" />
-						<img src="<?php bloginfo('template_url') ?>/assets/img/faces/card-profile2-square.jpg" class="img img-raised img-rounded" alt="" />
+						<?php  
+						$args = [
+							'posts_per_page' => -1,
+							'meta_key' => 'activa',
+							'meta_value' => true,
+							'post_type' => 'tiendas',
+							'orderby' => 'rand'
+						];
+						$tiendas = new WP_Query($args);
+						while( $tiendas->have_posts() ) : $tiendas->the_post();
+							the_post_thumbnail('thumbnail',[ 'class'=>'img img-raised img-rounded','alt'=>get_the_title() ]);
+						endwhile;
+						?>
+						
 					</div>
 
 				</div>
@@ -50,35 +62,13 @@
 		<?php endif; ?>
 
 		<ul class="pull-left">
-			<li>
-				<a href="#pablo">
-				   Blog
-				</a>
-			</li>
-			<li>
-				<a href="#pablo">
-					Presentation
-				</a>
-			</li>
-			<li>
-				<a href="#pablo">
-				   Discover
-				</a>
-			</li>
-			<li>
-				<a href="#pablo">
-					Payment
-				</a>
-			</li>
-			<li>
-				<a href="#pablo">
-					Contact Us
-				</a>
-			</li>
+			<li><a href="<?php bloginfo('wpurl') ?>/terminos-y-condiciones"> Términos y condiciones</a></li>
+			<li><a href="javascript: alerta({text:'Pronto tendremos precios para que puedas destacar tu tienda en nuesta plataforma.<br>Debes estar atento'})"> Precios</a></li>
+			<li><a href="<?php bloginfo('wpurl') ?>/contacto"> Contacto</a></li>
 		</ul>
 
 		<div class="copyright pull-right">
-			Copyright &copy; <script>document.write(new Date().getFullYear())</script> Creative Tim All Rights Reserved.
+			Copyright &copy; <script>document.write(new Date().getFullYear())</script> KioskoNOS - Todos los derechos reservados
 		</div>
 	</div>
 </footer>

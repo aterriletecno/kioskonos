@@ -61,6 +61,28 @@ function getTiendaByProduct($product_id){
     }
 }
 
+
+function getProductById($product_id){
+    $product_args = array( 
+        'post_type'  => 'productos',
+        'p' => $product_id
+    ); 
+
+    $product = new WP_Query( $product_args );
+    if($product->found_posts > 0){
+        $return_data = [];
+        while( $product->have_posts() ) : $product->the_post();
+            $return_data = [
+                'product_id' => get_the_ID(),
+                'title' => get_the_title( get_the_ID() )
+            ];
+        endwhile;
+        return $return_data;
+    } else {
+        return false;
+    }
+}
+
 function logout(){
     $_SESSION['kioskonos_logged'] = false;
     unset($_SESSION['kioskonos_logged']);
@@ -294,6 +316,64 @@ function get_producto(){
 }
 
 
+add_action('wp_ajax_denunciar_producto','denunciar_producto');
+function denunciar_producto(){
+    $producto = getProductById($_POST['product_id']);
+    $to = 'aterrile@gmail.com';
+    $subject = 'Kioskonos - Denuncia de Producto';
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= 'From: no-reply@kioskonos.cl'."\r\n".
+        'X-Mailer: PHP/' . phpversion();
+     
+    // Compose a simple HTML email message
+    $message = '<html><body>';
+    $message .= '<h3 style="color:#f40;">Hola</h3>';
+    $message .= '<p>Acaban de denunciar el producto: <strong>'. $producto['title'] .'</strong></p>';
+    $message .= '<p><a href="http://www.kioskonos.cl/?post_type=productos&p='.$producto['product_id'].'"></a></p>';
+    $message .= '</body></html>';
+     
+    // Sending email
+    if(mail($to, $subject, $message, $headers)){
+        $json = ['status' => 'OK'];
+    } else{
+        $json = ['status' => 'ERROR'];
+    }
+
+    echo json_encode($json);
+    exit();  
+}
+
+
+
+add_action('wp_ajax_contacto','contacto');
+function contacto(){
+    $to = 'aterrile@gmail.com';
+    $subject = 'Kioskonos - contacto';
+    $headers  = 'MIME-Version: 1.0' . "\r\n";
+    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+    $headers .= 'From: no-reply@kioskonos.cl'."\r\n".
+        'X-Mailer: PHP/' . phpversion();
+     
+    // Compose a simple HTML email message
+    $message = '<html><body>';
+    $message .= '<h3 style="color:#f40;">Nuevo mensaje desde kioskonos.cl</h3>';
+    $message .= '<p><strong>Nombre: </strong>'. $_POST['nombre'] .' '. $_POST['apellido'] .'</p>';
+    $message .= '<p><strong>Email: </strong>'. $_POST['email'] .'</p>';
+    $message .= '<p><strong>Mensaje: </strong>'. $_POST['mensaje'] .'</p>';
+    $message .= '</body></html>';
+     
+    // Sending email
+    if(mail($to, $subject, $message, $headers)){
+        $json = ['status' => 'OK'];
+    } else{
+        $json = ['status' => 'ERROR'];
+    }
+
+    echo json_encode($json);
+    exit();  
+}
+
 
 
 add_action('wp_ajax_register_user','register_user');
@@ -316,12 +396,46 @@ function register_user(){
 
 
 
+add_action('wp_ajax_inscribir_newsletter','inscribir_newsletter');
+function inscribir_newsletter(){
+    global $wpdb;
+
+    $sql = "
+    INSERT INTO newsletter (email) 
+        SELECT '". $_POST['newsletter_email'] ."' FROM DUAL
+    WHERE NOT EXISTS 
+        (SELECT email FROM newsletter WHERE email='". $_POST['newsletter_email'] ."');
+    ";
+    $wpdb->query($sql);
+
+    echo json_encode(['status'=>'OK']);
+    exit();  
+}
+
+
+
 add_action('wp_ajax_fav','fav');
 function fav(){
-    
-    
+    global $wpdb;
 
-    echo json_encode($product_result);
+    if( $_POST['method'] == 'remove' ){
+        $wpdb->delete( 'favoritos', [ 'user_id' => $_POST['user_id'],'product_id' => $_POST['product_id'] ] );
+    } 
+
+    if( $_POST['method'] == 'add' ){
+        $wpdb->insert( 'favoritos', [ 'user_id' => $_POST['user_id'],'product_id' => $_POST['product_id'] ] );
+    } 
+
+    extract($_POST);
+    $sql = "
+    SELECT F.product_id, P.post_title, P.ID
+    FROM favoritos F, wp_posts P
+    WHERE F.user_id = $user_id
+    AND P.ID = F.product_id
+    ";
+    $favoritos = $wpdb->get_results($sql);
+
+    echo json_encode(['status'=>'OK', 'favoritos' => $favoritos, 'total_favoritos' => count($favoritos) ]);
     exit();  
 }
 

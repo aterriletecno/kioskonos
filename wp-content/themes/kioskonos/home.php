@@ -4,16 +4,21 @@
  *
  */
 
-get_header(); ?>
+get_header(); 
+while( have_posts() ) : the_post();
+$banners = get_field('items');
+?>
 
 
 <div class="page-header header-filter" data-parallax="true">
-
 	<div class="owl-carousel" id="slider-home">
-		<div class="item" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/slide0.jpg');"></div>
-		<div class="item" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/slide3.jpg');"></div>
-		<div class="item" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/slide1.jpg');"></div>
-		<div class="item" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/slide2.jpg');"></div>
+		<?php  
+		$slides = array('slide0.jpg', 'slide3.jpg', 'slide1.jpg', 'slide2.jpg');
+		shuffle($slides);
+		foreach ($slides as $slide) {
+		?>
+		<div class="item" style="background-image: url('<?php bloginfo('template_url') ?>/assets/img/<?php echo $slide; ?>');"></div>
+		<?php } ?>
 	</div>
 	<div class="brand">
 		<h1 class="title">
@@ -29,67 +34,82 @@ get_header(); ?>
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="owl-carousel" id="banner_destacados">
-					<a href=""><img src="<?php bloginfo('template_url') ?>/assets/img/banner1.jpg" class="img-fluid"></a>
-					<a href=""><img src="<?php bloginfo('template_url') ?>/assets/img/banner2.jpg" class="img-fluid"></a>
-					<a href=""><img src="<?php bloginfo('template_url') ?>/assets/img/banner3.jpg" class="img-fluid"></a>
+					<?php foreach ($banners as $item) { ?>
+					<div class="item <?php echo $item['claridad'] ?> <?php echo $item['alineacion'] ?>">
+						<div class="floating">
+							<h1 class="title"><?php echo $item['titulo'] ?></h1>
+							<p><?php echo $item['bajada'] ?></p>
+							<a href="<?php echo $item['link'] ?>" class="btn btn-lg btn-round btn-success">Ver más</a>
+						</div>
+						<img src="<?php echo $item['foto']['sizes']['banner-tienda'] ?>" class="img-fluid">
+					</div>
+					<?php } ?>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="section no-padding">
        <div class="container">
-           <h2 class="section-title">Productos Destacados</h2>
+           <h2 class="title text-center">Productos Destacados</h2>
            <div class="row">
 
            		<?php  
-           		$arr = [
-           			'suit-1.jpg',
-					'dolce.jpg',
-					'tom-ford.jpg',
-					'suit-1.jpg',
-					'dolce.jpg',
-					'tom-ford.jpg'
+           		$args = [
+           			'post_type' => 'productos',
+           			'posts_per_page' => 6
            		];
-           		foreach ($arr as $key => $value) { 
+           		$query = new WP_Query($args);
+           		while( $query->have_posts() ) : $query->the_post();
        			?>
-
                 <div class="col-md-4">
 					<div class="card card-product card-plain">
 						<div class="card-image">
-							<a href="#pablo">
-								<img src="<?php bloginfo('template_url') ?>/assets/img/examples/<?php echo $value; ?>" alt="" />
+							<a href="<?php the_permalink(); ?>">
+								<?php the_post_thumbnail('product-thumbnail'); ?>
 							</a>
 						</div>
 						<div class="card-content">
 							<h4 class="card-title">
-								<a href="#pablo">Gucci</a>
+								<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 							</h4>
-							<p class="card-description">The structured shoulders and sleek detailing ensure a sharp silhouette. Team it with a silk pocket square and leather loafers.</p>
+							<p class="card-description">
+								<?php 
+								if( get_the_content() != "" ){
+									echo excerpt(get_the_content(),12);
+								} else {
+									echo "[Producto sin descripción]";
+								}
+								?>
+							</p>
 							<div class="footer">
 								<div class="price-container">
-									<span class="price price-old"> &euro;1,430</span>
-                                   	<span class="price price-new"> &euro;743</span>
+                                   	<span class="price price-new"><?php the_field('precio'); ?></span>
 								</div>
 								<div class="stats">
-									<button type="button" rel="tooltip" title="" class="btn btn-just-icon btn-simple btn-rose" data-original-title="Agregar a mis Favoritos">
-									   <i class="material-icons">favorite</i>
-								   </button>
+									<?php if(session('logged')): ?>
+									<button data-user_id="<?php echo session('user_id'); ?>" data-product_id="<?php echo get_the_ID(); ?>" type="button" rel="tooltip" title="<?php echo (isFav(session('user_id'),get_the_ID())) ? 'Quitar de' : 'Agregar a' ?> Favoritos" class="btn btn-just-icon btn-simple btn-rose btnAddFavoritos">
+										<div class="heart <?php echo (isFav(session('user_id'),get_the_ID())) ? 'active' : '' ?>"></div>
+									</button>
+									<?php else: ?>
+									<button onclick="javascript: alerta({text:'Debes estar registrado y acceder para guardar tus favoritos'})" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
+										<div class="heart"></div>
+									</button>
+									<?php endif; ?>
 								</div>
                             </div>
 						</div>
 					</div>
                 </div>
-                <?php } ?>
-
+                <?php endwhile; ?>
 
            </div>
        </div>
 	</div><!-- section -->
 </div> <!-- end-main-raised -->
 
-<div class="section section-blog">
+<div class="section section-blog pb-0">
 	<div class="container pb-5">
-		<h2 class="section-title">Tiendas</h2>
+		<h2 class="title text-center">Tiendas</h2>
 		<div class="row">
 			<div class="owl-carousel" id="carousel-marcas">
 			<?php 
@@ -120,9 +140,10 @@ get_header(); ?>
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="text-center">
-					<h3 class="title">Subscribe to our Newsletter</h3>
+					<h3 class="title">Inscríbase al Newsletter</h3>
 					<p class="description">
-						Join our newsletter and get news in your inbox every week! We hate spam too, so no worries about this.
+						Ingrese su email para recibir noticias y novedades del sitio.<br>
+						(No compartiremos su correo)
 					</p>
 				</div>
 
@@ -136,11 +157,14 @@ get_header(); ?>
 										<span class="input-group-addon">
 											<i class="material-icons">mail</i>
 										</span>
-										<div class="form-group is-empty"><input type="email" value="" placeholder="Your Email..." class="form-control"><span class="material-input"></span></div>
+										<div class="form-group is-empty">
+											<input type="email" name="newsletter_email" value="" placeholder="Su Email..." class="form-control">
+											<span class="material-input"></span>
+										</div>
 									</div>
 								</div>
 								<div class="col-sm-4">
-									<button type="button" class="btn btn-rose btn-block">Subscribe</button>
+									<button type="button" class="btn btn-rose btn-block btnInscribirNewsletter">Inscribirse</button>
 								</div>
 							</div>
 						</form>
@@ -152,4 +176,5 @@ get_header(); ?>
 	</div>
 </div>
 
+<?php endwhile; ?>
 <?php get_footer(); ?>

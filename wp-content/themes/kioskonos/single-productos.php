@@ -9,7 +9,11 @@
 get_header();
 while (have_posts()) : the_post();
 $tienda = get_field('tienda');
-$banner = get_field('banner');
+if( is_object($tienda) ){
+    $tienda = $tienda->ID;
+}
+
+$banner = get_field('banner',$tienda);
 if( !is_array($banner) ){
     $banner = wp_get_attachment_image_src($banner,'full');
 } else {
@@ -112,9 +116,15 @@ if( !$gallery ){
                     </div>
                     <div class="row text-right">
                     	<?php if(session('logged')): ?>
-                        <a href="#" class="btn btn-rose btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Agregar a Favoritos">
+                        <?php if( isFav(session('user_id'),get_the_ID()) ): ?>
+                        <a class="btnAddFavoritosSingle text-danger pr-4" data-user_id="<?php echo session('user_id') ?>" data-product_id="<?php echo get_the_ID(); ?>" data-toggle="tooltip" data-placement="top" title="Quitar de Favoritos">
+                            <i class="fa fa-heart"></i>
+                        </a>
+                        <?php else: ?>
+                        <a href="#" class="btn btn-rose btn-round btn-tooltip btnAddFavoritosSingle" data-user_id="<?php echo session('user_id') ?>" data-product_id="<?php echo get_the_ID(); ?>" data-toggle="tooltip" data-placement="top" title="Agregar a Favoritos">
                             <span class="hidden-md hidden-lg">Agregar a favoritos &nbsp; </span><i class="fa fa-heart"></i>
                         </a>
+                        <?php endif; ?>
                         <span  class="pl-2"><strong>Pedir:</strong></span>
                     	<a href="https://m.me/aterrile" class="btn btn-facebook btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Pedir por Facebook Messenger" target="_blank">
 						    <span class="hidden-md hidden-lg">Pedir por Messenger &nbsp; </span><i class="fa fa-facebook"></i>
@@ -127,6 +137,11 @@ if( !$gallery ){
                             Ingresa para poder pedir
                         </a>
                         <?php endif; ?>
+
+                        <div class="clearfix"></div>
+                        <a href="#" class="pull-right mt-5 text-black btnDenunciar" data-product_id="<?php echo get_the_ID(); ?>">
+                            <small>Denunciar &nbsp; <i class="fa fa-bullhorn"></i></small>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -167,9 +182,15 @@ if( !$gallery ){
 									<h4><?php the_field('precio') ?></h4>
 								</div>
                             	<div class="stats">
-									<button type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
-										<i class="fa fa-heart-o"></i>
-									</button>
+									<?php if(session('logged')): ?>
+                                    <button data-user_id="<?php echo session('user_id'); ?>" data-product_id="<?php echo get_the_ID(); ?>" type="button" rel="tooltip" title="<?php echo (isFav(session('user_id'),get_the_ID())) ? 'Quitar de' : 'Agregar a' ?> Favoritos" class="btn btn-just-icon btn-simple btn-rose btnAddFavoritos">
+                                        <div class="heart <?php echo (isFav(session('user_id'),get_the_ID())) ? 'active' : '' ?>"></div>
+                                    </button>
+                                    <?php else: ?>
+                                    <button onclick="javascript: alerta({text:'Debes estar registrado y acceder para guardar tus favoritos'})" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
+                                        <div class="heart"></div>
+                                    </button>
+                                    <?php endif; ?>
                             	</div>
                             </div>
 

@@ -1,14 +1,126 @@
 $(document).ready(function(){
 
+    $("#register-form").submit(function(event) {
+        event.preventDefault();
+        if( $("#register-form [name=terminos]").prop('checked') == false ){
+            alerta({text:'Debe aceptar los Términos y Condiciones para poder registrarse en KioskoNOS'});
+        } else {
+            $("#register-form")[0].submit();
+        }
+    });
+
+    $("#contact-form").submit(function(event){
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: AJAX_URL,
+            dataType: 'json',
+            data: $("#contact-form").serialize() + '&action=contacto',
+            beforeSend: function(){
+                $("#contact-form .btn").replaceWith('<div class="text-right mr-4 enviando"><strong>Enviando...</strong></div>');
+            },
+            success: function(json){
+                console.log(json);
+                $("#contact-form")[0].reset();
+                if(json.status = 'OK'){
+                    button = `
+                    <button type="submit" class="btn btn-success pull-right">Enviar
+                        <span class="material-icons">send</span>
+                    </button>
+                    `;
+                    $("#contact-form .enviando").replaceWith(button);
+                    alerta({text:'Gracias por tu mensaje!<br>Tan pronto como nos sea posible, te contactaremos para resolver tu inqueitud.<br>Que tengas un buen dia!'});
+                }
+            }
+        })
+    })
+
+    $(".btnInscribirNewsletter").click(function(){
+        if( $("[name=newsletter_email]").val() != "" ){
+            if( IsEmail( $("[name=newsletter_email]").val() ) ){
+                $.ajax({
+                    type: 'POST',
+                    url: AJAX_URL,
+                    dataType: 'json',
+                    data: 'action=inscribir_newsletter&newsletter_email=' + $("[name=newsletter_email]").val(),
+                    beforeSend: function(){
+                    },
+                    success: function(json){
+                        if(json.status = 'OK'){
+                            alerta({text:'Gracias por inscribirse!'});
+                        }
+                    }
+                })
+            } else {
+                alerta({text:'Ingrese un email válido'});
+            }
+        }
+    })
+
+    $(".btnDenunciar").click(function(event){
+        event.preventDefault();
+        product_id = $(this).data('product_id');
+        $.confirm({
+            'message'   : '¿Porque quieres denunciar este producto?<br><textarea focus class="form-control" name="denuncia_descripcion"></textarea>',
+            'buttons'   : {
+                'Volver'    : {
+                    'class' : 'btn-default pull-left'
+                },
+                'Enviar denuncia'   : {
+                    'class' : 'btn-success pull-right',
+                    'action': function(){
+                        $.ajax({
+                            type: 'POST',
+                            url: AJAX_URL,
+                            dataType: 'json',
+                            data: 'action=denunciar_producto&product_id=' + product_id + '&denuncia_descripcion=' + $("[name=denuncia_descripcion]").val(),
+                            beforeSend: function(){
+                            },
+                            success: function(json){
+                                if(json.status = 'OK'){
+                                    alerta({text:'Gracias por informarnos!<br>Revisaremos el producto que has denunciado para ver si infringe los términos y condiciones.'});
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        });
+
+    })
+
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
+
+    $("#sidebar .sidebar-header a.cerrar").click(function(event){
+        event.preventDefault();
+        $('#sidebar').removeClass('active');
+    })
+
+    $(".btnAddFavoritosSingle").click(function(){
+        $('.tooltip').hide();
+        $(this).toggleClass('btn btn-rose btn-round btn-tooltip text-danger pr-4');
+        
+        if( $(this).hasClass('btn') == false ){ // Agregar
+            $(this).attr('data-original-title','Quitar de favoritos');
+            recalcularFavoritos( $(this).data('user_id'),$(this).data('product_id'),'add' );
+        } else {
+            $(this).attr('data-original-title','Agregar a favoritos');
+            recalcularFavoritos( $(this).data('user_id'),$(this).data('product_id'),'remove' );
+        }
+
+    })
+
     $(".btnAddFavoritos").click(function(){
         $('.tooltip').hide();
         $(this).find('.heart').toggleClass('active');
         if( $(this).find('.heart').hasClass('active') == true ){ // Agregar
-            addFavorito( $(this).data('user_id'),$(this).data('product_id'),'add' );
             $(this).attr('data-original-title','Quitar de favoritos');
+            recalcularFavoritos( $(this).data('user_id'),$(this).data('product_id'),'add' );
         } else {
-            addFavorito( $(this).data('user_id'),$(this).data('product_id'),'remove' ); //Quitar
             $(this).attr('data-original-title','Agregar a favoritos');
+            recalcularFavoritos( $(this).data('user_id'),$(this).data('product_id'),'remove' );
         }
     })
     $(".heart").on('click touchstart', function(){
@@ -82,6 +194,8 @@ $(document).ready(function(){
     }, 4000);
 
 
+    $(".overlay, .loader").fadeOut(300);
+
 })
 
 
@@ -112,7 +226,7 @@ $(document).ready(function(){
     });
 
     $("#carousel-marcas").owlCarousel({
-        autoplay : true,
+        autoplay : false,
         nav: true,
         dots: false,
         loop: true,
@@ -139,10 +253,6 @@ $(document).ready(function(){
 })
 
 
-$(window).on("load",function(){
-    $(".overlay, .loader").delay(1000).fadeOut(300);
-});
-
 $(window).on("resize",function(){
     $('#slider-home .item').height( $(window).height() )
     if( $(window).width() < 768 ){
@@ -165,7 +275,7 @@ alerta = function( options ) {
         <div class="alert_overlay"></div>
         <div class="alert_container">
             <p>`+ settings.text +`</p>
-            <a href="javascript: alerta({ action:'close' });" class="btn btn-default pull-right">Entendido!</a>
+            <a href="javascript: alerta({ action:'close' });" class="btn btn-info pull-right">Entendido!</a>
         </div>
         `;
         $("body").append(h);
@@ -181,72 +291,40 @@ alerta = function( options ) {
             $(".alert_overlay, .alert_container").remove();
         });
     }
-
-}
-
-
-addFavorito = function(prod_id,user_id,method){
-
-    if (localStorage.getItem("kioskonos_favoritos" + user_id) === null) {
-        localStorage.setItem("kioskonos_favoritos" + user_id,"["+prod_id+"]");
-    } else {
-        product_items = localStorage.getItem("kioskonos_favoritos" + user_id);
-        json_product_items = JSON.parse(product_items);
-        json_product_items.push(prod_id);
-        console.log(json_product_items);
-    }
-
-
-    return;
-
-    var fav_ids = [12,45,67,3];
-    var existe_fav = fav_ids.includes(12);
-
-    var kioskonos_favoritos = localStorage.getItem("kioskonos_favoritos");
-
-    console.log( kioskonos_favoritos );
-
-    /*
-    $.ajax({
-        type: 'POST',
-        url: AJAX_URL,
-        dataType: 'json',
-        data: {
-            'product_id' : prod_id,
-            'user_id' : user_id,
-            'method' : method
-        },
-        beforeSend: function(){
-        },
-        success: function(json){
-            alerta({text:'Favorito'});
-        }
-    })
-    */
 }
 
 
 
+function recalcularFavoritos(user_id,product_id,method){
 
-function recalcular(user_id){
-    total_productos = 0;
-    objCart = "[";
-    $(".card-product").each(function(){
-        heart = $(this).find('.heart');
-        button = $(this).find('.btnAddFavoritos');
-
-        if( heart.hasClass('active') ){
-            total_productos++;  
-            objCart += button.data('product_id') + ',';
-        }
-    });
-
-    if( total_productos > 0 ){
-        objCart = objCart.substring(0, objCart.length - 1);
+    var post_data = {
+        product_id:product_id,
+        user_id:user_id, 
+        action:'fav',
+        method: method
     }
 
-    objCart += "]";
+    $.post(AJAX_URL, post_data, function(result){
+        $(".fav_counter").text(result.total_favoritos);
+        $(".fav_header_list").empty();
+        $.each(result.favoritos, function(k,prod){
+            html = `
+                <li>
+                    <a href="` + WPURL + `/?post_type=productos&p=` + prod.ID + `">
+                        ` + prod.post_title + `
+                    </a>
+                </li>
+            `;
+            $(".fav_header_list").append(html);
+        })
+        
+    },'json');
 
-    sessionStorage.setItem('kioskonos_favoritos' + user_id, objCart);
+}
 
+
+
+function IsEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
 }

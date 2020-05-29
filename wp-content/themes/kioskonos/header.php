@@ -89,20 +89,46 @@ $categorias = get_categories($args);
     <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.min.js" type="text/javascript"></script>
     <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.konfirm.js"></script>
 
+    <script> WPURL = '<?php echo bloginfo('wpurl') ?>'</script>
     <script> AJAX_URL = '<?php echo admin_url('admin-ajax.php') ?>'</script>
 
 </head>
 
 <body <?php body_class() ?>>
-
 <script src="<?php bloginfo('template_url') ?>/assets/js/fb-functions.js"></script>
+
+
+
+<nav id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="title">Categorías</h5>
+            <a href="" class="cerrar"><i class="fa fa-times"></i></a>
+        </div>
+        <ul class="dropdown-menu dropdown-with-icons">
+			<?php 
+			foreach ($categorias as $category) { 
+				if( $category->cat_ID != 1 ):
+				?>
+				<li><a href="<?php bloginfo('wpurl') ?>/?cat=<?php echo $category->cat_ID ?>"> 
+					<i class="fa fa-<?php echo get_field('icon',$category) ?>"></i> &nbsp; <?php echo $category->name ?></a>
+				</li>
+				<?php 
+				endif;
+			} 
+			?>
+		</ul>
+    </nav>
+
+
+
+
 
 	<div class="top-bar">
 		<div class="container">
 			<div class="text-right">
-				<a href="<?php bloginfo('wpurl') ?>/terminos-y-condiciones"> <i class="fa fa-info-circle"></i> Terminos y condiciones</a>
-				<a href=""> <i class="fa fa-usd"></i> Precios</a>
-				<a href=""> <i class="fa fa-envelope-o"></i> Contacto</a>
+				<a href="<?php bloginfo('wpurl') ?>/terminos-y-condiciones"> <i class="fa fa-info-circle"></i> Términos y condiciones</a>
+				<a href="javascript: alerta({text:'Pronto tendremos precios para que puedas destacar tu tienda en nuesta plataforma.<br>Debes estar atento'})"> <i class="fa fa-usd"></i> Precios</a>
+				<a href="<?php bloginfo('wpurl') ?>/contacto"> <i class="fa fa-envelope-o"></i> Contacto</a>
 			</div>
 		</div>
 	</div>
@@ -116,7 +142,7 @@ $categorias = get_categories($args);
 		            <span class="icon-bar"></span>
 		            <span class="icon-bar"></span>
         		</button>
-        		<a class="navbar-brand" href="<?php bloginfo('wpurl') ?>">kioskoNOS</a>
+        		<a class="navbar-brand ml-2 ml-xl-0 ml-lg-0" href="<?php bloginfo('wpurl') ?>">kioskoNOS</a>
         	</div>
 
         	<div class="collapse navbar-collapse">
@@ -135,32 +161,42 @@ $categorias = get_categories($args);
 						</ul>
 					</li>
 
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					<li class="dropdown categorias_menu">
+						<a href="#" id="sidebarCollapse" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-list-ul"></i> Categorias
 							<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu dropdown-with-icons">
-							<?php foreach ($categorias as $category) { ?>
-							<li><a href="<?php bloginfo('wpurl') ?>/?cat=<?php echo $category->cat_ID ?>"> 
-								<i class="fa fa-<?php echo get_field('icon',$category) ?>"></i> &nbsp; <?php echo $category->name ?></a>
-							</li>
-							<?php } ?>
-						</ul>
 					</li>
 
+					<?php 
+					if( session('logged') ): 
+					global $wpdb;
+					$favs = $wpdb->get_results('select product_id from favoritos where user_id = ' . session('user_id') );
+					?>
 					<li class="button-container dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							<i class="fa fa-heart"></i><span class="badge">5</span>
+							<i class="fa fa-heart"></i><span class="badge fav_counter"><?php echo count($favs); ?></span>
 						</a>
-						<ul class="dropdown-menu dropdown-with-icons">
+						<ul class="dropdown-menu dropdown-with-icons fav_header_list">
+							<?php 
+							if($favs):
+							foreach ($favs as $fav) : 
+							?>
 							<li>
-								<a href="">
-									sadas
+								<a href="<?php bloginfo('wpurl') ?>/?post_type=productos&p=<?php echo $fav->product_id; ?>">
+									<?php echo get_the_title($fav->product_id) ?>
 								</a>
 							</li>
+							<?php
+							endforeach; 
+							else:
+							?>
+							<li><a>Aun no tienes favoritos</a></li>
+							<?php endif; ?>
 						</ul>
 					</li>
+					<?php endif; ?>
+
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle btn btn-round btn-success" data-toggle="dropdown">
 							<i class="fa fa-user"></i>
@@ -180,6 +216,11 @@ $categorias = get_categories($args);
 							<li>
 								<a href="<?php bloginfo('wpurl') ?>/mi-tienda/"> 
 									<i class="material-icons">storefront</i> Mi Tienda
+								</a>
+							</li>
+							<li>
+								<a href="<?php bloginfo('wpurl') ?>/mis-favoritos/"> 
+									<i class="material-icons">favorite</i> Mis Favoritos
 								</a>
 							</li>
 							<li>

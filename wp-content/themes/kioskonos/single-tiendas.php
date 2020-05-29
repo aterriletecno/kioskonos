@@ -21,13 +21,6 @@ if( $activa ):
 
 $avatar = get_field('avatar');
 
-$args = [
-	'orderby' => 'id',
-    'parent'  => 0,
-    'hide_empty'=> true,
-];
-$categorias = get_categories($args);
-
 
 $categorias = [];
 $args = [
@@ -70,7 +63,8 @@ wp_reset_query();
         		<?php the_post_thumbnail('thumbnail'); ?>
         	</div>
 
-        	<div class="about-description text-center mt-5 pt-5">
+
+        	<div class="about-description text-center mt-4">
                 <div class="row">
     				<div class="col-md-8 col-md-offset-2">
     					<h5 class="description pt-4">
@@ -80,7 +74,7 @@ wp_reset_query();
     			</div>
             </div>
 
-			<h2 class="section-title">Nuestros productos</h2>
+			<h2 class="title text-center">Nuestros productos</h2>
 			<div class="row">
 				<div class="col-md-3">
 					<div class="card card-refine card-plain">
@@ -143,7 +137,7 @@ wp_reset_query();
 										<a href="<?php the_permalink() ?>"><?php the_title() ?></a>
 									</h4>
 									<div class="card-description">
-										<?php echo excerpt(get_the_content(),12) ?>
+										<?php echo excerpt(get_the_content(),10) ?>
 									</div>
 									<div class="footer">
 		                                <div class="price">
@@ -156,7 +150,7 @@ wp_reset_query();
 											</button>
 											<?php else: ?>
 											<button onclick="javascript: alerta({text:'Debes estar registrado y acceder para guardar tus favoritos'})" type="button" rel="tooltip" title="Agregar a Favoritos" class="btn btn-just-icon btn-simple btn-rose">
-												<i class="fa fa-heart-o"></i>
+												<div class="heart"></div>
 											</button>
 											<?php endif; ?>
 		                            	</div>

@@ -1,3 +1,86 @@
+.footer-big .gallery-feed img{
+    height: auto;
+}
+#sidebar {
+    width: 280px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    z-index: 999;
+    background: #fff;
+    color: #fff;
+    transition: all 0.3s;
+    margin-right: -290px;
+    z-index: 9999;
+    overflow: auto;
+    -webkit-box-shadow: -5px 0px 10px 0px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow:    -5px 0px 10px 0px rgba(50, 50, 50, 0.3);
+    box-shadow:         -5px 0px 10px 0px rgba(50, 50, 50, 0.3);
+}
+
+#sidebar .sidebar-header{
+    color: #000;
+    font-size: 16px;
+    text-align: center;
+    position: relative;
+}
+
+#sidebar .sidebar-header a.cerrar{
+    position: absolute;
+    top: 0px;
+    right: 10px;
+}
+
+#sidebar.active {
+    margin-right: 0;
+}
+
+#sidebar ul.dropdown-menu{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: block;
+    top: 50px;
+    width: 100%;
+}
+
+#sidebar ul a{
+    color: #333;
+}
+
+#sidebar ul a:hover,
+#sidebar ul a:focus{
+    color: #fff;
+}
+
+
+h1.title{
+    text-align: center;
+}
+
+.categorias_menu .dropdown-menu.dropdown-with-icons li > a {
+    padding: 4px 20px 4px 12px;
+}
+
+.navbar-brand{
+    display: block;
+    width: 120px;
+    height: 21px;
+    background: url(../img/logo_chico_negro.png) no-repeat center center;
+    background-size: 100%;
+    text-indent: -99999px;
+}
+
+.navbar-transparent .navbar-brand{
+    display: block;
+    width: 120px;
+    height: 21px;
+    background: url(../img/logo_chico_blanco.png) no-repeat center center;
+    background-size: 100%;
+    text-indent: -99999px;
+}
+
 .heart {
   cursor: pointer;
   height: 50px;
@@ -12,7 +95,7 @@
 }
 
 .heart:hover{
-    transform: scale(1.2);
+    transform: scale(1.5);
 }
 .heart.active{
     background-position:right;
@@ -344,6 +427,10 @@ body.home .page-header .brand {
     text-align: center;
 }
 
+.card.card-product .card-content{
+    min-height: 200px;
+}
+
 #carousel-marcas .card{
     margin: 0 auto;
 }
@@ -375,6 +462,42 @@ body.home .page-header .brand {
     width: 100%;
     margin: 0 auto;
 }
+
+#banner_destacados .item .floating{
+    position: absolute;
+    width: 50%;
+    top: 20%;
+    left: 10%;
+    height: 100%;
+}
+#banner_destacados .item.derecha .floating{
+    left: auto;
+    right: 10%;
+    text-align: right;
+}
+
+#banner_destacados .item h1{
+    color: #000;
+    text-align: left;
+}
+#banner_destacados .item.claro h1{
+    color: #fff
+}
+
+
+#banner_destacados .item p{
+    color: #000;
+    font-size: 22px;
+    line-height: 26px;
+}
+#banner_destacados .item.claro p{
+    color: #fff
+}
+
+#banner_destacados .item .btn{
+    margin-top: 10%;
+}
+
 
 #banner_destacados .owl-nav button{
     position: absolute;
@@ -540,6 +663,38 @@ body.single-productos .main-product .nav > li{
 
 
 @media(max-width: 768px){
+    #confirmBox{
+        width: 94%;
+        margin-left: -47%;
+    }
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+
+    .top-bar a {
+        font-size: 11px;
+    }
+
+    .top-bar a:after {
+        margin: 0 8px;
+    }
+
+    .navbar-brand{
+        margin-top: 0px;
+    }
+
+    .navbar-transparent .navbar-brand{
+        margin-top: 13px;
+    }
+
+    .navbar .navbar-collapse .open .dropdown-menu > li > a:hover, 
+    .navbar .navbar-collapse .open .dropdown-menu > li > a:focus{
+        color: #000;
+    }
+
     h1.title img{
         display: block;
         width: 90%;
@@ -552,7 +707,8 @@ body.single-productos .main-product .nav > li{
     }
 
     #categoryTree{
-        height: 300px;
+        height: auto;
+        max-height: 300px;
         overflow: auto;
     }
 
@@ -561,6 +717,87 @@ body.single-productos .main-product .nav > li{
         float: none;
         margin: 60px auto 0 !important;
     }
+
+    .profile-page .card-content{
+        padding: 15px 0;
+    }
+
+
+    #banner_destacados .item{
+        height: 400px;
+    }
+
+    #banner_destacados .item img{
+        object-fit: cover;
+        height: 100%;
+    }
+
+    #banner_destacados .item h1{
+        font-size: 24px;
+        text-align: center;
+    }
+
+    #banner_destacados .item .floating {
+        width: 90%;
+        top: 6%;
+        left: 5%;
+    }
+
+    #banner_destacados .item.derecha .floating {
+        width: 90%;
+        top: 6%;
+        left: 5%;
+    }
+
+    #banner_destacados .item p {
+        font-size: 17px;
+        line-height: 23px;
+        text-align: center;
+    }
+
+    #banner_destacados .item .btn {
+        display: block;
+        width: 150px;
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        margin: 0 0 0 -77px;
+    }
+
+    #carousel-marcas .card .card-content{
+        width: 100%;
+        padding: 0px;
+        text-align: center;
+        display: block;
+    }
+
+    #carousel-marcas .card .card-content img{
+        display: inline;
+        height: 100%;
+        width: auto;
+        margin: 0 auto;
+    }
+
+    #carousel-marcas button.owl-next{
+        right: -2px;
+    }
+
+    #carousel-marcas button.owl-prev{
+        left: -2px;
+    }
+
+    .single-tiendas .avatar {
+        width: 200px;
+        height: 200px;
+        left: 50%;
+        margin: -80px 0 0 -100px;
+    }
+
+    .single-tiendas .about-description{
+        padding-top: 0px !important;
+        margin-top: 0px !important;
+    }
+
 }
 
 
