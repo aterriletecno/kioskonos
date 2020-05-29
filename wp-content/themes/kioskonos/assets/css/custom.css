@@ -1,3 +1,9 @@
+.btn-instagram{
+    background: #d6249f;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+    box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+}
+
 .footer-big .gallery-feed img{
     height: auto;
 }
@@ -431,6 +437,18 @@ body.home .page-header .brand {
     min-height: 200px;
 }
 
+.card.card-product .card-image{
+    -moz-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.card.card-product:hover .card-image{
+    -moz-transform: scale(1.03);
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
 #carousel-marcas .card{
     margin: 0 auto;
 }
@@ -764,6 +782,10 @@ body.single-productos .main-product .nav > li{
         margin: 0 0 0 -77px;
     }
 
+    #banner_destacados .owl-nav button{
+        font-size: 38px
+    }
+
     #carousel-marcas .card .card-content{
         width: 100%;
         padding: 0px;
@@ -810,5 +832,9 @@ body.single-productos .main-product .nav > li{
     #previewBanner{
         width: 90%;
         height: 60px
+    }
+
+    #banner_destacados .owl-nav button{
+        font-size: 24px
     }
 }

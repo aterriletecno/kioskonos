@@ -40,7 +40,10 @@ while( $query->have_posts() ) : $query->the_post();
 endwhile;
 wp_reset_query();
 
-
+$facebook = get_field('facebook',$tienda_id);
+$instagram = get_field('instagram',$tienda_id);
+$twitter = get_field('twitter',$tienda_id);
+$youtube = get_field('youtube',$tienda_id);
 
 ?>
 <div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner[0] ?>');">
@@ -67,7 +70,36 @@ wp_reset_query();
         	<div class="about-description text-center mt-4">
                 <div class="row">
     				<div class="col-md-8 col-md-offset-2">
-    					<h5 class="description pt-4">
+    					<div class="social pt-4">
+    						<strong>Visítanos en:</strong><br>
+    						<?php if($facebook): ?>
+    						<a href="<?php echo $facebook; ?>" target="_blank" data-toggle="tooltip" title="Facebook" class="mx-1 btn btn-just-icon btn-round btn-facebook">
+	                			<i class="fa fa-facebook"> </i>
+	                		</a>
+	                		<?php endif; ?>
+
+	                		<?php if($instagram): ?>
+	                		<a href="<?php echo $instagram; ?>" target="_blank" data-toggle="tooltip" title="Instagram" class="mx-1 btn btn-just-icon btn-round btn-instagram">
+	                			<i class="fa fa-instagram"> </i>
+	                		</a>
+	                		<?php endif; ?>
+
+	                		<?php if($twitter): ?>
+	                		<a href="<?php echo $twitter; ?>" target="_blank" data-toggle="tooltip" title="Twitter" class="mx-1 btn btn-just-icon btn-round btn-twitter">
+	                			<i class="fa fa-twitter"> </i>
+	                		</a>
+	                		<?php endif; ?>
+
+	                		<?php if($youtube): ?>
+	                		<a href="<?php echo $youtube; ?>" target="_blank" data-toggle="tooltip" title="Youtube" class="mx-1 btn btn-just-icon btn-round btn-youtube">
+	                			<i class="fa fa-youtube"> </i>
+	                		</a>
+	                		<?php endif; ?>
+
+	                		
+
+    					</div>
+    					<h5 class="description pt-2">
     						<?php the_content(); ?>
     					</h5>
     				</div>
@@ -141,7 +173,7 @@ wp_reset_query();
 									</div>
 									<div class="footer">
 		                                <div class="price">
-											<h4><?php the_field('precio') ?></h4>
+											<h4><span class="price price-new">$ <?php echo number_format(get_field('precio'),0,',','.') ?></span></h4>
 										</div>
 		                            	<div class="stats">
 		                            		<?php if(session('logged')): ?>

@@ -38,8 +38,15 @@ $banners = get_field('items');
 					<div class="item <?php echo $item['claridad'] ?> <?php echo $item['alineacion'] ?>">
 						<div class="floating">
 							<h1 class="title"><?php echo $item['titulo'] ?></h1>
+							
+							<?php if( $item['bajada'] ): ?>
 							<p><?php echo $item['bajada'] ?></p>
+							<?php endif; ?>
+							
+							<?php if( $item['link'] ): ?>
 							<a href="<?php echo $item['link'] ?>" class="btn btn-lg btn-round btn-success">Ver más</a>
+							<?php endif; ?>
+							
 						</div>
 						<img src="<?php echo $item['foto']['sizes']['banner-tienda'] ?>" class="img-fluid">
 					</div>
@@ -83,7 +90,7 @@ $banners = get_field('items');
 							</p>
 							<div class="footer">
 								<div class="price-container">
-                                   	<span class="price price-new"><?php the_field('precio'); ?></span>
+                                   	<span class="price price-new">$ <?php echo number_format(get_field('precio'),0,',','.') ?></span>
 								</div>
 								<div class="stats">
 									<?php if(session('logged')): ?>

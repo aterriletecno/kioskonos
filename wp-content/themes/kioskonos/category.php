@@ -103,7 +103,7 @@ $this_cat = $category->term_id;
 											</div>
 											<div class="footer">
 				                                <div class="price">
-													<h4><?php the_field('precio') ?></h4>
+													<h4><span class="price price-new">$ <?php echo number_format(get_field('precio'),0,',','.') ?></span></h4>
 												</div>
 				                            	<div class="stats">
 				                            		<?php if(session('logged')): ?>

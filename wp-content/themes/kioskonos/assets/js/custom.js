@@ -1,5 +1,35 @@
 $(document).ready(function(){
 
+    $(document).mouseup(function(e){
+        var container = $("#sidebar");
+        if (!container.is(e.target) && container.has(e.target).length === 0) 
+        {
+            container.removeClass('active');
+        }
+    });
+    
+    $("[type=number]").keydown(function(e){
+        var key = e.charCode || e.keyCode || 0;
+        // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+        // home, end, period, and numpad decimal
+        if(
+            key == 8 || 
+            key == 9 ||
+            key == 13 ||
+            key == 46 ||
+            key == 110 ||
+            key == 190 ||
+            (key >= 35 && key <= 40) ||
+            (key >= 48 && key <= 57) ||
+            (key >= 96 && key <= 105)
+        ){
+            return;
+        } else {
+            alerta({text:'Solo números en este campo'});
+        }
+
+    })
+
     $("#register-form").submit(function(event) {
         event.preventDefault();
         if( $("#register-form [name=terminos]").prop('checked') == false ){
@@ -210,6 +240,8 @@ $(document).ready(function(){
         nav: true,
         dots: true,
         loop: true,
+        smartSpeed: 1500,
+        autoplayTimeout: 7000,
         navText : ['<span class="lnr lnr-chevron-left"></span>','<span class="lnr lnr-chevron-right"></span>'],
     });
 

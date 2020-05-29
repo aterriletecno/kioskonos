@@ -78,7 +78,7 @@ if( !$gallery ){
                 </div>
                 <div class="col-md-6 col-sm-6">
 					<h2 class="title"> <?php the_title(); ?> </h2>
-					<h3 class="main-price"><?php the_field('precio'); ?></h3>
+					<h3 class="main-price"><span class="price price-new">$ <?php echo number_format(get_field('precio'),0,',','.') ?></span></h3>
 					<div id="acordeon">
                         <div class="panel-group" id="accordion">
                       <div class="panel panel-border panel-default">

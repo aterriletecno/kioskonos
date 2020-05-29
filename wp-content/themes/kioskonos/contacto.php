@@ -23,7 +23,7 @@ while( have_posts() ) : the_post();
                     <div class="card card-contact">
                         <form role="form" id="contact-form" method="post">
                             <div class="header header-raised header-primary text-center">
-                                <h4 class="card-title">Escribenos</h4>
+                                <h4 class="card-title">Escríbenos</h4>
                             </div>
                             <div class="card-content">
                                 <div class="row">

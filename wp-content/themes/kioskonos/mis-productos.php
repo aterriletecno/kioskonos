@@ -299,7 +299,7 @@ if( !is_array($banner) ){
 								<span class="input-group-addon">
 									<i class="material-icons">attach_money</i>
 								</span>
-								<input name="precio" type="text" class="form-control" placeholder="Precio..." required>
+								<input name="precio" type="number" class="form-control" placeholder="Precio..." required>
 							</div>
 
 							<div class="input-group">

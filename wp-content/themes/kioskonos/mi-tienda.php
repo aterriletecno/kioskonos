@@ -184,7 +184,7 @@ if( !is_array($banner) ){
 			                            	<button class="btn btn-default btn-round">Cambiar logo</button>
 				                            <input type="file" name="avatar" onchange="loadFile(event, 'previewLogo')" >
 
-				                            <a href="javascript: alerta({text:'Asegúrate que la imagen es cuadrada, ya que la plataforma la recortará automaticamente'})" style="position: absolute; top: 19px; right: -20px;">
+				                            <a href="javascript: alerta({text:'Asegúrate que la imagen sea cuadrada (máximo 512x512 píxeles)<br> ya que la plataforma la recortará automaticamente'})" style="position: absolute; top: 19px; right: -20px;">
 												<i class="material-icons">help_outline</i>
 											</a>
 
@@ -295,7 +295,7 @@ if( !is_array($banner) ){
 														</div>
 													<span class="material-input"></span></div>
 													<span class="input-group-addon">
-														<a href="javascript: alerta({text:'Esta imagen aparecerá como imagen principal de fondo cuando la gente entre a revisar tu tienda'})">
+														<a href="javascript: alerta({text:'Esta imagen aparecerá como imagen principal de fondo cuando la gente entre a revisar tu tienda<br>Debe ser de 1200x500 pixeles o similar tamaño proporcional'})">
 															<i class="material-icons">help_outline</i>
 														</a>
 													</span>
