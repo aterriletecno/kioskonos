@@ -8,6 +8,7 @@
  */
 get_header();
 while (have_posts()) : the_post();
+$permalink = get_permalink();
 $tienda_id = get_the_ID();
 $banner = get_field('banner');
 if( !is_array($banner) ){
@@ -105,7 +106,7 @@ $youtube = get_field('youtube',$tienda_id);
     				</div>
     			</div>
             </div>
-
+            <div id="product-list"></div>
 			<h2 class="title text-center">Nuestros productos</h2>
 			<div class="row">
 				<div class="col-md-3">
@@ -123,10 +124,16 @@ $youtube = get_field('youtube',$tienda_id);
 										<?php 
 										foreach ($categorias as $category) { 
 										if($category != 1):
+										$selected_categories = explode(",",$_GET['cat']);
+										
+										$checked = "";
+										if( in_array($category,$selected_categories) ){
+											$checked = "checked";
+										}
 										?>
 										<div class="checkbox">
 											<label>
-											   	<input type="checkbox" value="<?php echo $category; ?>" data-toggle="checkbox">
+											   	<input type="checkbox" value="<?php echo $category; ?>" data-toggle="checkbox" <?php echo $checked; ?>>
 												<?php echo get_cat_name($category); ?>
 											</label>
 										</div>
@@ -150,13 +157,16 @@ $youtube = get_field('youtube',$tienda_id);
 				 			'meta_key' => 'tienda',
 				 			'meta_value' => $tienda_id,
 				 			'post_type' => 'productos',
-				 			'posts_per_page' => -1
+				 			'posts_per_page' => -1,
 				 		];
+				 		if( $_GET['cat'] ){
+				 			$args['cat'] = $_GET['cat'];
+				 		}
 				 		$query = new WP_Query($args);
 				 		while( $query->have_posts() ) : $query->the_post();
 				 		?>
 
-					 	<div class="col-sm-6 col-md-4 col-centered">
+					 	<div class="col-xs-6 col-sm-6 col-md-4 col-centered">
 							<div class="card card-product">
 								<div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
 									<a href="<?php the_permalink() ?>">
@@ -209,7 +219,17 @@ $youtube = get_field('youtube',$tienda_id);
 <script>
 	
 $(".category_list input[type=checkbox]").change(function(){
-	console.log( $(this).prop('checked') );
+	cat = [];
+	$(".category_list input[type=checkbox]").each(function(){
+		if( $(this).prop('checked') == true ){
+			cat.push($(this).val());
+		}
+	})
+	$(".overlay").addClass('submit');
+    $(".overlay, .loader").show();
+	
+    window.location.href = '<?php echo $permalink ?>?cat=' + cat.join() + '#product-list';
+
 })
 
 </script>

@@ -325,7 +325,7 @@ if( !is_array($banner) ){
 								</span>
 								<?php  
 								$args = [
-									'orderby' => 'id',
+									'orderby' => 'name',
 								    'parent'  => 0,
 								    'hide_empty'=> false,
 								];
@@ -369,31 +369,7 @@ if( !is_array($banner) ){
 
 <script>
 
-$(".btnEdit").click(function(event){
-	event.preventDefault();
-	product_id = $(this).data('product-id');
-	$.ajax({
-		type: 'POST',
-		url: '<?php echo admin_url('admin-ajax.php'); ?>',
-		dataType: 'json',
-		data: 'action=get_producto&product_id=' + product_id,
-		beforeSend: function(){
-		},
-		success: function(json){
-			$("[name=product_id]").val( json.id );
-			$("[name=nombre]").val( json.title );
-			$("[name=descripcion]").val( json.descripcion );
-			$("[name=precio]").val( json.precio );
-			$("#product-thumbnail").attr( 'src',json.thumbnail );
-			$.each(json.categorias, function(k,v){
-				$("[name='categoria[]'][value=" + v.term_id + "]").prop('checked',true);
-			})
-			$("#addProductModal").modal('show');
-		}
-	})
 
-	
-})
 
 $(".btnDelete").click(function(e){
 	product_id = $(this).data('product-id');
@@ -410,7 +386,7 @@ $(".btnDelete").click(function(e){
                 'action': function(){
                     $.ajax({
 	            		type: 'POST',
-	            		url: '<?php echo admin_url('admin-ajax.php'); ?>',
+	            		url: '<?php bloginfo('template_url'); ?>/ajax.php',
 	            		dataType: 'json',
 	            		data: 'action=eliminar_producto&product_id=' + product_id,
 	            		beforeSend: function(){

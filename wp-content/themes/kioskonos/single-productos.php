@@ -31,7 +31,7 @@ if( !$gallery ){
 	<div class="container" style="padding-top: 13vh">
         <div class="row title-row">
             <div class="col-lg-12">
-				<h2 class="title text-center">
+				<h2 class="title text-center" id="producto-title">
 					<?php echo get_the_title($tienda); ?>
 				</h2>
             </div>
@@ -114,7 +114,7 @@ if( !$gallery ){
 							</select>
                         </div>
                     </div>
-                    <div class="row text-right">
+                    <div class="row text-right botones">
                     	<?php if(session('logged')): ?>
                         <?php if( isFav(session('user_id'),get_the_ID()) ): ?>
                         <a class="btnAddFavoritosSingle text-danger pr-4" data-user_id="<?php echo session('user_id') ?>" data-product_id="<?php echo get_the_ID(); ?>" data-toggle="tooltip" data-placement="top" title="Quitar de Favoritos">
@@ -125,7 +125,7 @@ if( !$gallery ){
                             <span class="hidden-md hidden-lg">Agregar a favoritos &nbsp; </span><i class="fa fa-heart"></i>
                         </a>
                         <?php endif; ?>
-                        <span  class="pl-2"><strong>Pedir:</strong></span>
+                        <span  class="pl-2 d-block"><strong>Pedir:</strong></span>
                     	<a href="https://m.me/aterrile" class="btn btn-facebook btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Pedir por Facebook Messenger" target="_blank">
 						    <span class="hidden-md hidden-lg">Pedir por Messenger &nbsp; </span><i class="fa fa-facebook"></i>
 					 	</a>
@@ -162,7 +162,7 @@ if( !$gallery ){
                 $query = new WP_Query($args);
                 while( $query->have_posts() ) : $query->the_post();
                 ?>
-				<div class="col-sm-6 col-md-3">
+				<div class="col-xs-6 col-sm-6 col-md-3">
 					<div class="card card-product">
 						<div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
 							<a href="<?php the_permalink() ?>">

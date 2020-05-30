@@ -116,7 +116,7 @@ $banners = get_field('items');
 
 <div class="section section-blog pb-0">
 	<div class="container pb-5">
-		<h2 class="title text-center">Tiendas</h2>
+		<h2 class="title text-center">Tiendas Destacadas</h2>
 		<div class="row">
 			<div class="owl-carousel" id="carousel-marcas">
 			<?php 
@@ -147,10 +147,10 @@ $banners = get_field('items');
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="text-center">
-					<h3 class="title">Inscríbase al Newsletter</h3>
+					<h3 class="title">Inscríbete al Newsletter</h3>
 					<p class="description">
-						Ingrese su email para recibir noticias y novedades del sitio.<br>
-						(No compartiremos su correo)
+						Ingresa tu email para recibir noticias y novedades del sitio.<br>
+						(No compartiremos tu correo)
 					</p>
 				</div>
 
@@ -165,7 +165,7 @@ $banners = get_field('items');
 											<i class="material-icons">mail</i>
 										</span>
 										<div class="form-group is-empty">
-											<input type="email" name="newsletter_email" value="" placeholder="Su Email..." class="form-control">
+											<input type="email" name="newsletter_email" value="" placeholder="Tu Email..." class="form-control">
 											<span class="material-input"></span>
 										</div>
 									</div>

@@ -242,7 +242,9 @@ if( !is_array($banner) ){
 							                	<input type="checkbox" name="activa" <?php echo (get_field('activa',$tienda_id)) ? 'checked' : ''; ?>>
 												Activar Tienda
 							            	</label>
+							            	<a href="#" class="btn-tienda-help"><i class="material-icons">help_outline</i></a>
 							            </div>
+
 									</div>
 								</div>
 
@@ -263,7 +265,7 @@ if( !is_array($banner) ){
 													<span class="input-group-addon">
 														<i class="material-icons">chat</i>
 													</span>
-													<textarea rows="5" name="descripcion" class="form-control" placeholder="Breve Descripcion..." required><?php echo strip_tags(get_the_content()) ?></textarea>
+													<textarea rows="5" name="descripcion" class="form-control" placeholder="Breve Descripcion..."><?php echo strip_tags(get_the_content()) ?></textarea>
 												</div>
 
 												<div class="input-group">
@@ -286,7 +288,7 @@ if( !is_array($banner) ){
 													<div class="form-group form-file-upload is-empty is-fileinput">
 														<input type="file" name="banner" id="inputFile2" onchange="loadFile(event, 'previewBanner')">
 														<div class="input-group">
-															<input type="text" name="banner_name" readonly="" class="form-control" placeholder="Selecciona una imagen">
+															<input type="text" name="banner_name" readonly="" class="form-control" placeholder='Selecciona una imagen de cabecera o "Banner"'>
 															<span class="input-group-btn input-group-s">
 																<button type="button" class="btn btn-just-icon btn-round btn-primary">
 																	<i class="material-icons">attach_file</i>

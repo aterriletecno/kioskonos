@@ -318,7 +318,7 @@ function get_producto(){
 
 add_action('wp_ajax_denunciar_producto','denunciar_producto');
 function denunciar_producto(){
-    $producto = getProductById($_POST['product_id']);
+    //$producto = getProductById($_POST['product_id']);
     $to = 'aterrile@gmail.com';
     $subject = 'Kioskonos - Denuncia de Producto';
     $headers  = 'MIME-Version: 1.0' . "\r\n";
@@ -328,9 +328,9 @@ function denunciar_producto(){
      
     // Compose a simple HTML email message
     $message = '<html><body>';
-    $message .= '<h3 style="color:#f40;">Hola</h3>';
-    $message .= '<p>Acaban de denunciar el producto: <strong>'. $producto['title'] .'</strong></p>';
-    $message .= '<p><a href="http://www.kioskonos.cl/?post_type=productos&p='.$producto['product_id'].'"></a></p>';
+    $message .= '<h3>Hola</h3>';
+    $message .= '<p>Acaban de denunciar el producto: <strong><a href="http://www.kioskonos.cl/?post_type=productos&p='.$_POST['product_id'].'">'. $_POST['product_id'] .'</a></strong></p>';
+    $message .= '<p>Motivo: ' . $_POST['denuncia_descripcion'] . '</p>';
     $message .= '</body></html>';
      
     // Sending email
@@ -339,6 +339,19 @@ function denunciar_producto(){
     } else{
         $json = ['status' => 'ERROR'];
     }
+
+    echo json_encode($json);
+    exit();  
+}
+
+
+add_action('wp_ajax_test_ajax','test_ajax');
+function test_ajax(){
+    
+    $json = [
+        'status' => 'TESTING',
+        'post' => $_POST
+    ];
 
     echo json_encode($json);
     exit();  
@@ -357,7 +370,7 @@ function contacto(){
      
     // Compose a simple HTML email message
     $message = '<html><body>';
-    $message .= '<h3 style="color:#f40;">Nuevo mensaje desde kioskonos.cl</h3>';
+    $message .= '<h3>Nuevo mensaje desde kioskonos.cl</h3>';
     $message .= '<p><strong>Nombre: </strong>'. $_POST['nombre'] .' '. $_POST['apellido'] .'</p>';
     $message .= '<p><strong>Email: </strong>'. $_POST['email'] .'</p>';
     $message .= '<p><strong>Mensaje: </strong>'. $_POST['mensaje'] .'</p>';

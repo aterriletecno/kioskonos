@@ -1,5 +1,73 @@
 $(document).ready(function(){
 
+    $(".btn-tienda-help").click(function(event){
+        event.preventDefault();
+        content = `
+        <div id="modalTiendaHelp" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-body">
+                <h5 class="title text-center mb-0">¿Primera vez haciendo tu tienda?</h5>
+                <h6 class="title text-center my-0 mb-3">Sigue estos consejos:</h6>
+                <ul>
+                    <li> Al activar tu tienda, significa que aparecerás en la lista de tiendas. Procura seguir los consejos y tips que se te dan al presionar el icono de ayuda <i class="material-icons">help_outline</i> para que tengas una tienda ordenada y agradable a la vista. </li>
+                    <li> Por defecto, la plataforma usa la palabra "Tienda de", seguido de tu nombre con el que te registraste. Puedes cambiar este nombre, pero evita que sea muy largo, para que tus clientes puedan recordarlo. </li>
+                    <li> La descripción no es requerida, pero es bueno que des una pequeña introducción de tu tiena, para que los clientes te conoscan más.</li>
+                    <li> La imagen de cabecera o "banner" aparecerá como imagen principal de fondo cuando la gente entre a revisar tu tienda. Debe ser de 1200x500 pixeles o similar tamaño proporcional.</li>
+                    <li> Recuerda ingresar bien tus datos de contactos y redes sociales. Si no tienes redes sociales, no importa. Ya aprenderás a usarlas.</li>
+                    <li> El logo de tu tienda <strong>debe ser una imagen cuadrada</strong>, ya que la plataforma la usa en esa proporción. (Evita que sea mas grande que 512x512 píxeles). </li>
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Entendido!</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        `;
+
+        $("body").append(content);
+        $("#modalTiendaHelp").modal('show');
+    })
+
+    $("#btnAddProduct").click(function(){
+        $("#formNewModelo")[0].reset();
+        $("#formNewModelo .modal-title").text('Agregar nuevo producto');
+        $("#formNewModelo #product-thumbnail").attr('src',TEMPLATE_URL + '/assets/img/img_icon.png');
+    })
+    $(".mis-productos .btnEdit").click(function(event){
+        event.preventDefault();
+        product_id = $(this).data('product-id');
+        $.ajax({
+            type: 'POST',
+            url: AJAX_URL,
+            dataType: 'json',
+            data: 'action=get_producto&product_id=' + product_id,
+            beforeSend: function(){
+            },
+            success: function(json){
+                $("#formNewModelo .modal-title").text('Editar producto');
+                $("[name=product_id]").val( json.id );
+                $("[name=nombre]").val( json.title );
+                $("[name=descripcion]").val( json.descripcion );
+                $("[name=precio]").val( json.precio );
+                $("#product-thumbnail").attr( 'src',json.thumbnail );
+                $.each(json.categorias, function(k,v){
+                    $("[name='categoria[]'][value=" + v.term_id + "]").prop('checked',true);
+                })
+                $("#addProductModal").modal('show');
+            }
+        })
+    })
+
+    $("form").submit(function(){
+        $(".overlay").addClass('submit');
+        $(".overlay, .loader").show();
+    })
+
     $(document).mouseup(function(e){
         var container = $("#sidebar");
         if (!container.is(e.target) && container.has(e.target).length === 0) 
@@ -59,7 +127,9 @@ $(document).ready(function(){
                     </button>
                     `;
                     $("#contact-form .enviando").replaceWith(button);
-                    alerta({text:'Gracias por tu mensaje!<br>Tan pronto como nos sea posible, te contactaremos para resolver tu inqueitud.<br>Que tengas un buen dia!'});
+                    alerta({text:'Gracias por tu mensaje!<br>Tan pronto como nos sea posible, te contactaremos para resolver tu inquietud.<br>Que tengas un buen dia!'});
+                    $(".overlay").removeClass('submit');
+                    $(".overlay, .loader").hide();
                 }
             }
         })
@@ -103,7 +173,11 @@ $(document).ready(function(){
                             type: 'POST',
                             url: AJAX_URL,
                             dataType: 'json',
-                            data: 'action=denunciar_producto&product_id=' + product_id + '&denuncia_descripcion=' + $("[name=denuncia_descripcion]").val(),
+                            data: {
+                                action: 'denunciar_producto',
+                                product_id: product_id,
+                                denuncia_descripcion: $("[name=denuncia_descripcion]").val()
+                            },
                             beforeSend: function(){
                             },
                             success: function(json){

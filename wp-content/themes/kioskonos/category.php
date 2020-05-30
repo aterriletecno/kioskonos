@@ -44,7 +44,7 @@ $this_cat = $category->term_id;
 
 								<div class="panel panel-default panel-rose">
 									<div class="panel-heading" role="tab" id="headingThree">
-										<h4 class="panel-title pull-left">Categorias</h4>
+										<h4 class="panel-title pull-left">Otras Categorias</h4>
 										<a  class="collapsed hidden-lg hidden-md" role="button" data-toggle="collapse" data-parent="#accordion" href="#categoryTree" aria-expanded="false" aria-controls="categoryTree" class="pull-right"><i class="fa fa-angle-down"></i></a>
 										<div class="clearfix"></div>
 									</div>
@@ -86,7 +86,7 @@ $this_cat = $category->term_id;
 						 		while( $query->have_posts() ) : $query->the_post();
 						 		?>
 
-							 	<div class="col-sm-6 col-md-4 col-centered">
+							 	<div class="col-xs-6 col-sm-6 col-md-4 col-centered">
 									<div class="card card-product">
 										<div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
 											<a href="<?php the_permalink() ?>">

@@ -129,9 +129,13 @@ get_header();
         	<form class="form" method="post" action="" id="register-form">
 	            <div class="row">
 					<div class="col-md-8 col-md-offset-2">
-						<h5 class="description pt-3">This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious, otherwise he wouldn't scroll to get here. Add a button if you want the user to see more.</h5>
+						<h5 class="description pt-3">
+							Regístrate en KioskoNOS y tendras acceso a crear tu propia tienda, par vender tus productos. Podrás guardar tus favoritos y tener acceso a ellos cuando quieras.<br>
+							También podrás hacer los pedidos de tus tiendas favoritas, ya que necesitas estar registrado para poder hacer el pedido.
+						</h5>
 					</div>
 				</div>
+				<!--
 				<div class="row-centered">
 					<div class="col-centered col-lg-6 col-xs-12">
 						<div class="social text-center">
@@ -142,6 +146,7 @@ get_header();
 	                    </div>
 					</div>
 				</div>
+				-->
 				<div class="row row-centered">
 					<div class="col-centered col-lg-6 col-md-12 col-xs-12">
 						<div class="input-group">

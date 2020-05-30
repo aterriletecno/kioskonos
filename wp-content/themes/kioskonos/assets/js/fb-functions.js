@@ -19,12 +19,16 @@ window.fbAsyncInit = function() {
 
 function init(){
     FB.getLoginStatus(function(response) {
-        console.log(response);
+        //console.log(response);
     });
 }
 
 function fbLogin(){
-    FB.login(function(response){
-        console.log(response);
-    });
+    FB.login(function(response) {
+        if (response.status === 'connected') {
+            
+        } else {
+            
+        }
+    }, {scope: 'public_profile,email'});
 };

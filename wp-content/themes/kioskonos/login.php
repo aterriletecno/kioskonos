@@ -46,6 +46,7 @@ while (have_posts()) : the_post();
 					<div class="col-md-8 col-md-offset-2">
 					</div>
 				</div>
+				<!--
 				<div class="row-centered">
 					<div class="col-centered col-lg-6 col-xs-12">
 						<div class="social text-center">
@@ -56,6 +57,7 @@ while (have_posts()) : the_post();
 	                    </div>
 					</div>
 				</div>
+				-->
 				<div class="row row-centered">
 					<div class="col-centered col-lg-6 col-md-12 col-xs-12">
 						<div class="input-group">

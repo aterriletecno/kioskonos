@@ -89,8 +89,9 @@ $categorias = get_categories($args);
     <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.min.js" type="text/javascript"></script>
     <script src="<?php bloginfo('template_url') ?>/assets/js/jquery.konfirm.js"></script>
 
-    <script> WPURL = '<?php echo bloginfo('wpurl') ?>'</script>
-    <script> AJAX_URL = '<?php echo admin_url('admin-ajax.php') ?>'</script>
+    <script> WPURL = '<?php bloginfo('wpurl') ?>'</script>
+    <script> TEMPLATE_URL = '<?php bloginfo('template_url') ?>'</script>
+    <script> AJAX_URL = '<?php bloginfo('template_url') ?>/ajax.php'</script>
 
 </head>
 
