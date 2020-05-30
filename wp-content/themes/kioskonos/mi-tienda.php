@@ -171,7 +171,7 @@ if( !is_array($banner) ){
 		        <div class="container">
 
 		            <div class="row">
-		                <div class="col-xs-6 col-xs-offset-3">
+		                <div class="col-xs-12 col-lg-12">
 		    	           <div class="profile">
 		                        <div class="avatar">
 		                            <?php if( has_post_thumbnail() ): ?>
@@ -182,7 +182,7 @@ if( !is_array($banner) ){
 		                            <div style="width: 250px;">
 			                            <div class="input_myfile">
 			                            	<button class="btn btn-default btn-round">Cambiar logo</button>
-				                            <input type="file" name="avatar" onchange="loadFile(event, 'previewLogo')" >
+				                            <input type="file" accept="image/png, image/jpeg" name="avatar" onchange="loadFile(event, 'previewLogo')" >
 
 				                            <a href="javascript: alerta({text:'Asegúrate que la imagen sea cuadrada (máximo 512x512 píxeles)<br> ya que la plataforma la recortará automaticamente'})" style="position: absolute; top: 19px; right: -20px;">
 												<i class="material-icons">help_outline</i>
@@ -258,14 +258,24 @@ if( !is_array($banner) ){
 													<span class="input-group-addon">
 														<i class="material-icons">face</i>
 													</span>
-													<input type="text" name="nombre" class="form-control" placeholder="Nombre de la tienda..." value="<?php the_title(); ?>" required>
+													<input type="text" name="nombre" class="form-control" maxlength="40" placeholder="Nombre de la tienda..." value="<?php the_title(); ?>" required>
+													<span class="input-group-addon">
+														<a href="javascript: alerta({text:'Evita que sea un nombre muy largo para que tus clientes puedan recordarlo<br>Puedes ingresar máximo 40 caracteres'})">
+															<i class="material-icons">help_outline</i>
+														</a>
+													</span>
 												</div>
 
 												<div class="input-group">
 													<span class="input-group-addon">
 														<i class="material-icons">chat</i>
 													</span>
-													<textarea rows="5" name="descripcion" class="form-control" placeholder="Breve Descripcion..."><?php echo strip_tags(get_the_content()) ?></textarea>
+													<textarea rows="5" name="descripcion" maxlength="250" class="form-control" placeholder="Breve Descripcion..."><?php echo strip_tags(get_the_content()) ?></textarea>
+													<span class="input-group-addon">
+														<a href="javascript: alerta({text:'Puedes ingresar máximo 250 caracteres'})">
+															<i class="material-icons">help_outline</i>
+														</a>
+													</span>
 												</div>
 
 												<div class="input-group">
@@ -286,7 +296,7 @@ if( !is_array($banner) ){
 														<img src="https://via.placeholder.com/468x100?text=Imagen%20horizontal%20%20de%201200x400%20Aprox." id="previewBanner" class="img-responsive">
 													<?php endif; ?>
 													<div class="form-group form-file-upload is-empty is-fileinput">
-														<input type="file" name="banner" id="inputFile2" onchange="loadFile(event, 'previewBanner')">
+														<input type="file" accept="image/png, image/jpeg" name="banner" id="inputFile2" onchange="loadFile(event, 'previewBanner')">
 														<div class="input-group">
 															<input type="text" name="banner_name" readonly="" class="form-control" placeholder='Selecciona una imagen de cabecera o "Banner"'>
 															<span class="input-group-btn input-group-s">
@@ -311,7 +321,7 @@ if( !is_array($banner) ){
 													</span>
 													<input type="text" name="whatsapp" class="form-control" placeholder="Numero de whatsapp..." value="<?php the_field('whatsapp') ?>" required>
 													<span class="input-group-addon">
-														<a href="javascript: alerta({text:'Ingresa tu número completo, inluyendo el +56 <br>Si no lo ingresas bien, la gente no podrá contactarte'})">
+														<a href="javascript: alerta({text:'Ingresa tu número completo, inluyendo el +56 <br>Si no lo ingresas bien, la gente no podrá contactarte<br>(Puedes usar el mismo número de los Datos de contacto)'})">
 															<i class="material-icons">help_outline</i>
 														</a>
 													</span>

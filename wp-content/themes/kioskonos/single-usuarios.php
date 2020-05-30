@@ -31,6 +31,7 @@ if( get_the_ID() == session('user_id') ):
 		<div class="row title-row">
     		<div class="col-md-8 col-md-offset-2">
                 <h1 class="title">Perfil de usuario</h1>
+                <h3 class="title"><?php the_title(); ?></h3>	
             </div>
         </div>
     </div>
@@ -41,18 +42,6 @@ if( get_the_ID() == session('user_id') ):
 		<div class="profile-content">
 	        <div class="container">
 
-	            <div class="row">
-	                <div class="col-xs-6 col-xs-offset-3">
-	    	           <div class="profile">
-	                        <div class="avatar">
-	                            <img src="<?php bloginfo('template_url') ?>/assets/img/placeholder.jpg" alt="...">
-	                        </div>
-	                        <div class="name">
-	                            <h3 class="title"><?php the_title(); ?></h3>	
-							</div>
-	                    </div>
-		            </div>
-	            </div>
 
 	            <form method="post" action="" autocomplete="off">
 	            	<input style="position: absolute; top: -999999px; left: -9999999px" type="text" name="fakeusernameremembered"/>
@@ -64,7 +53,7 @@ if( get_the_ID() == session('user_id') ):
 								<span class="input-group-addon">
 									<i class="material-icons">face</i>
 								</span>
-								<input type="text" name="nombre" class="form-control" placeholder="Nombre completo..." value="<?php the_title(); ?>" required>
+								<input type="text" name="nombre" maxlength="100" class="form-control" placeholder="Nombre completo..." value="<?php the_title(); ?>" required>
 							</div>
 
 							<div class="input-group">

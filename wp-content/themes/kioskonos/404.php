@@ -12,7 +12,7 @@ get_header(); ?>
 	<div class="container">
 		<div class="row title-row">
     		<div class="col-md-8 col-md-offset-2">
-                <h1 class="title">¿Perdido?</h1>
+                <h1 class="title">404<br>¿Perdido?</h1>
             </div>
         </div>
     </div>

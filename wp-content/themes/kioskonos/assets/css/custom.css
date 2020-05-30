@@ -390,6 +390,9 @@ a:hover, a:focus{
     padding: 0px;
 }
 
+.page-header.header-small{
+    height: 70vh;
+}
 
 .page-header .title-row{
     color: #FFFFFF;
@@ -464,8 +467,18 @@ body.home .page-header .brand {
     vertical-align: middle;
 }
 
-#carousel-marcas .card .card-content img{
+#carousel-marcas .card.card-product{
+    width: 232px;
+    height: 232px;
+    border-radius: 50%;
+    display: block;
+}
+
+#carousel-marcas .card .card-content img {
     max-height: 100%;
+    height: auto;
+    border-radius: 200px;
+    margin: 14px auto;
 }
 
 #carousel-marcas button{
@@ -562,6 +575,7 @@ body.home .page-header .brand {
     height: auto;
     display: block;
     margin: 20px auto 0;
+    border-radius: 200px;
 }
 
 .single-tiendas .card.card-product,
@@ -579,6 +593,10 @@ body.single-productos a.zoom{
 
 body.single-productos h2.title {
     line-height: 40px;
+}
+
+body.single-productos .page-header{
+    background-position: center center;
 }
 
 
@@ -727,6 +745,11 @@ bodybody.single-productos .main-product .nav > li{
         color: #000;
     }
 
+    .navbar .navbar-collapse .open .dropdown-menu.dropdown-with-icons > li > a {
+        padding: 12px 20px 12px 15px;
+        overflow: hidden;
+    }
+
     h1.title img{
         display: block;
         width: 90%;
@@ -811,7 +834,7 @@ bodybody.single-productos .main-product .nav > li{
         display: inline;
         height: 100%;
         width: auto;
-        margin: 0 auto;
+        margin: 14px auto;
     }
 
     #carousel-marcas button.owl-next{

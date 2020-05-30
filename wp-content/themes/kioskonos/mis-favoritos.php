@@ -45,7 +45,13 @@ while( have_posts() ) : the_post();
                         <div class="card card-product">
                             <div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
                                 <a href="<?php the_permalink() ?>">
-                                    <?php the_post_thumbnail('product-thumbnail', ['class'=>'img','title'=>get_the_title(),'alt'=>get_the_title()]) ?>
+                                    <?php 
+                                    if( has_post_thumbnail() ):
+                                        the_post_thumbnail('product-thumbnail', ['class'=>'img','title'=>get_the_title(),'alt'=>get_the_title()]);
+                                    else:
+                                        echo '<img src="'.get_bloginfo('template_url').'/assets/img/no-img.jpg" class="img" alt="'.get_the_title().'" title="'.get_the_title().'">';
+                                    endif;
+                                    ?>
                                 </a>
                             </div>
 
@@ -58,7 +64,7 @@ while( have_posts() ) : the_post();
                                 </div>
                                 <div class="footer">
                                     <div class="price">
-                                        <h4><?php the_field('precio') ?></h4>
+                                        <span class="price price-new">$ <?php echo number_format(get_field('precio'),0,',','.') ?></span>
                                     </div>
                                 </div>
 

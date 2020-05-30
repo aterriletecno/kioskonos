@@ -16,6 +16,8 @@ if( !is_array($banner) ){
 } else {
 	$banner = [$banner['url']];
 }
+
+
 $activa = get_field('activa');
 
 if( $activa ):
@@ -64,13 +66,20 @@ $youtube = get_field('youtube',$tienda_id);
         <div class="container">
 
         	<div class="avatar">
-        		<?php the_post_thumbnail('thumbnail'); ?>
+        		<?php 
+				if( has_post_thumbnail() ):
+					the_post_thumbnail('thumbnail');
+				else:
+					echo '<img src="'.get_bloginfo('template_url').'/assets/img/no-img.jpg" class="img" alt="'.get_the_title().'" title="'.get_the_title().'">';
+				endif;
+				?>
         	</div>
 
 
         	<div class="about-description text-center mt-4">
                 <div class="row">
     				<div class="col-md-8 col-md-offset-2">
+    					<?php if( $facebook || $instagram || $twitter || $youtube ): ?>
     					<div class="social pt-4">
     						<strong>Visítanos en:</strong><br>
     						<?php if($facebook): ?>
@@ -96,10 +105,9 @@ $youtube = get_field('youtube',$tienda_id);
 	                			<i class="fa fa-youtube"> </i>
 	                		</a>
 	                		<?php endif; ?>
-
-	                		
-
     					</div>
+    					<?php endif; ?>
+
     					<h5 class="description pt-2">
     						<?php the_content(); ?>
     					</h5>
@@ -170,7 +178,13 @@ $youtube = get_field('youtube',$tienda_id);
 							<div class="card card-product">
 								<div class="card-image" onclick="location.href='<?php the_permalink(); ?>'">
 									<a href="<?php the_permalink() ?>">
-										<?php the_post_thumbnail('product-thumbnail', ['class'=>'img','title'=>get_the_title(),'alt'=>get_the_title()]) ?>
+										<?php 
+										if( has_post_thumbnail() ):
+											the_post_thumbnail('product-thumbnail', ['class'=>'img','title'=>get_the_title(),'alt'=>get_the_title()]);
+										else:
+											echo '<img src="'.get_bloginfo('template_url').'/assets/img/no-img.jpg" class="img" alt="'.get_the_title().'" title="'.get_the_title().'">';
+										endif;
+										?>
 									</a>
 								</div>
 

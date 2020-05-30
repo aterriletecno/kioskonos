@@ -24,12 +24,12 @@
 						</div>
 						<div class="feed-line">
 							<p>
-								<a href="javascript: alerta({text:'Pronto!'})"><i class="fa fa-facebook-square"></i> &nbsp; Facebook (Pronto)</a>
+								<a href="https://www.facebook.com/Kioskonos-101812454896531"  target="_blank"><i class="fa fa-facebook-square"></i> &nbsp; Facebook</a>
 							</p>
 						</div>
 						<div class="feed-line">
 							<p>
-								<a href="javascript: alerta({text:'Pronto!'})"><i class="fa fa-instagram"></i> &nbsp; Instagram (Pronto)</a>
+								<a href="https://www.instagram.com/kioskonos/" target="_blank"><i class="fa fa-instagram"></i> &nbsp; Instagram</a>
 							</p>
 						</div>
 					</div>
@@ -40,7 +40,7 @@
 					<div class="gallery-feed">
 						<?php  
 						$args = [
-							'posts_per_page' => -1,
+							'posts_per_page' => 8,
 							'meta_key' => 'activa',
 							'meta_value' => true,
 							'post_type' => 'tiendas',
@@ -68,7 +68,7 @@
 		</ul>
 
 		<div class="copyright pull-right">
-			Copyright &copy; <script>document.write(new Date().getFullYear())</script> KioskoNOS - Todos los derechos reservados
+			Copyright &copy; <?php echo date('Y') ?> KioskoNOS - Todos los derechos reservados
 		</div>
 	</div>
 </footer>

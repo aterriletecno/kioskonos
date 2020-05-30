@@ -70,11 +70,17 @@ $banners = get_field('items');
        			?>
                 <div class="col-md-4">
 					<div class="card card-product card-plain">
-						<div class="card-image">
-							<a href="<?php the_permalink(); ?>">
-								<?php the_post_thumbnail('product-thumbnail'); ?>
-							</a>
-						</div>
+						<a href="<?php the_permalink(); ?>">
+							<div class="card-image">
+								<?php 
+								if( has_post_thumbnail() ):
+									the_post_thumbnail('product-thumbnail', ['title'=>get_the_title(),'alt'=>get_the_title()]);
+								else:
+									echo '<img src="'.get_bloginfo('template_url').'/assets/img/no-img.jpg" class="img" alt="'.get_the_title().'" title="'.get_the_title().'">';
+								endif;
+								?>
+							</div>
+						</a>
 						<div class="card-content">
 							<h4 class="card-title">
 								<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
