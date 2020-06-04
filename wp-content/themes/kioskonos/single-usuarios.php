@@ -71,7 +71,7 @@ if( get_the_ID() == session('user_id') ):
 							</div>
 
 							<div class="text-center">
-								<button type="submit" class="btn btn-success">Gurdar &nbsp; <i class="material-icons">save</i></button>
+								<button type="submit" class="btn btn-success">Guardar &nbsp; <i class="material-icons">save</i></button>
 							</div>
 		            	</div>
 					</div>

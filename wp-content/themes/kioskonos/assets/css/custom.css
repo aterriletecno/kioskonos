@@ -1,4 +1,18 @@
+.desktop{ display: block; }
+.mobile{ display: none; }
 
+.invisible{
+    position: absolute;
+    left: -9999px;
+    visibility: visible !important;
+}
+
+.social-box strong{
+    display: inline;
+}
+.privacy-policy .the_content h4{
+    font-weight: bold;
+}
 
 .btn-instagram{
     background: #d6249f;
@@ -36,8 +50,9 @@
 
 #sidebar .sidebar-header a.cerrar{
     position: absolute;
-    top: 0px;
+    top: 3px;
     right: 10px;
+    z-index: 9px;
 }
 
 #sidebar.active {
@@ -712,7 +727,21 @@ bodybody.single-productos .main-product .nav > li{
 }
 
 
+@media(max-width: 991px){
+    .desktop{ display: none; }
+    .mobile{ display: block; }
+}
+
 @media(max-width: 768px){
+    .desktop{ display: none; }
+    .mobile{ display: block; }
+
+    .social-box strong{
+        display: block;
+    }
+    #register-form .description{
+        padding: 0 30px;
+    }
     #confirmBox{
         width: 94%;
         margin-left: -47%;

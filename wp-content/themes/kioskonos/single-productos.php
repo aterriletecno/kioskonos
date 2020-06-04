@@ -29,6 +29,9 @@ if( !$gallery ){
         $gallery = [['url'=>get_bloginfo('template_url').'/assets/img/no-img.jpg']];
     endif;
 }
+
+$despacho_a_domicilio = get_field('despacho_a_domicilio',$tienda);
+
 ?>
 
 
@@ -36,9 +39,9 @@ if( !$gallery ){
 	<div class="container" style="padding-top: 13vh">
         <div class="row title-row">
             <div class="col-lg-12">
-				<h2 class="title text-center" id="producto-title">
-					<?php echo get_the_title($tienda); ?>
-				</h2>
+                <h2 class="title text-center" id="producto-title">
+                    <?php echo get_the_title($tienda); ?>
+                </h2>
             </div>
         </div>
     </div>
@@ -80,8 +83,26 @@ if( !$gallery ){
                         endif;
                       	?>
                     </ul>
+
+                    <div class="text-left social-box">
+                        <strong class="pr-2 d-block d-lg-inline">Comparte este producto en:</strong>
+                        <button onclick="window.open('https://www.facebook.com/sharer.php?t=<?php echo urlencode('Me gusta este producto que vi en www.kioskonos.cl') ?>&u=<?php echo urlencode(get_permalink()) ?>','','width=600,height=300')" class="btn btn-just-icon btn-round btn-facebook">
+                            <i class="fa fa-facebook"> </i>
+                        </button>
+                        <button onclick="window.open('https://twitter.com/intent/tweet?text=<?php echo urlencode('Me gusta este producto que vi en www.kioskonos.cl: ' . get_permalink()) ?>','','width=600,height=300')" class="btn btn-just-icon btn-round btn-twitter">
+                            <i class="fa fa-twitter"></i>
+                        </button>
+                        <button onclick="window.open('https://wa.me/?text=<?php echo urlencode('Me gusta este producto que vi en www.kioskonos.cl: ' . get_permalink()) ?>','','width=600,height=300')" class="btn btn-just-icon btn-round btn-success">
+                            <i class="fa fa-whatsapp"></i>
+                        </button>
+                        <input class="invisible" id="copyTarget" value="<?php the_permalink(); ?>">
+                        <button data-toggle="tooltip" title="Copiar perfil de la Tienda" onclick="copyToClipboard(document.getElementById('copyTarget'));" class="btn btn-just-icon btn-round btn-default">
+                            <i class="fa fa-link"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="col-md-6 col-sm-6">
+
 					<h2 class="title"> <?php the_title(); ?> </h2>
 					<h3 class="main-price"><span class="price price-new">$ <?php echo number_format(get_field('precio'),0,',','.') ?></span></h3>
 					<div id="acordeon">
@@ -111,13 +132,16 @@ if( !$gallery ){
 								<option value="20+">Más de 20</option>
 							</select>
                         </div>
+                        <?php if( $despacho_a_domicilio == 'SI' ): ?>
                         <div class="col-md-6 col-sm-6">
                             <label>¿Quieres con despacho a domicilio?</label>
 							<select class="selectpicker" name="despacho" data-style="select-with-transition" data-size="7">
+                                <option value="">Selecciona una opcion</option>
 								<option value="Si">Si </option>
 								<option value="No">No</option>
 							</select>
                         </div>
+                        <?php endif; ?>
                     </div>
                     <div class="row text-right botones">
                     	<?php if(session('logged')): ?>
@@ -131,12 +155,19 @@ if( !$gallery ){
                         </a>
                         <?php endif; ?>
                         <span  class="pl-2 d-block"><strong>Pedir:</strong></span>
-                    	<a href="https://m.me/aterrile" class="btn btn-facebook btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Pedir por Facebook Messenger" target="_blank">
+                    	
+                        <?php if( get_field('messenger',$tienda) ): ?>
+                        <a href="https://m.me/<?php echo get_field('messenger',$tienda) ?>" class="btn btn-facebook btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Pedir por Facebook Messenger" target="_blank">
 						    <span class="hidden-md hidden-lg">Pedir por Messenger &nbsp; </span><i class="fa fa-facebook"></i>
 					 	</a>
+                        <?php endif; ?>
+
+                        <?php if( get_field('whatsapp',$tienda) ): ?>
                         <a href="#" class="btn btn-success btn-round btn-tooltip btn-pedir-whatsapp" data-title="<?php the_title(); ?>" data-whatsapp="<?php echo str_replace('+','',get_field('whatsapp',$tienda)) ?>" data-toggle="tooltip" data-placement="top" title="Pedir por WhatsApp" target="_blank">
                         	<span class="hidden-md hidden-lg">Pedir por Whatsapp &nbsp; </span><i class="fa fa-whatsapp"></i>
                         </a>
+                        <?php endif; ?>
+
                         <?php else: ?>
                         <a href="<?php bloginfo('wpurl'); ?>/login/?redirect=<?php echo urlencode(get_permalink()) ?>" class="btn btn-rose btn-round btn-tooltip" data-toggle="tooltip" data-placement="top" title="Ingresa o registrate">
                             Ingresa para poder pedir

@@ -65,6 +65,7 @@
 			<li><a href="<?php bloginfo('wpurl') ?>/terminos-y-condiciones"> Términos y condiciones</a></li>
 			<li><a href="javascript: alerta({text:'Pronto tendremos precios para que puedas destacar tu tienda en nuesta plataforma.<br>Debes estar atento'})"> Precios</a></li>
 			<li><a href="<?php bloginfo('wpurl') ?>/contacto"> Contacto</a></li>
+			<li><a href="<?php bloginfo('wpurl') ?>/contacto"> Feedback</a></li>
 		</ul>
 
 		<div class="copyright pull-right">

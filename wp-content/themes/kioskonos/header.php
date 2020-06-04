@@ -17,24 +17,37 @@ if( session('logged') && !$valid_user ){
 	exit();
 }
 
-$args = [
-	'posts_per_page' => -1,
-	'meta_key' => 'activa',
-	'meta_value' => true,
-	'post_type' => 'tiendas'
-];
-$tiendas = new WP_Query($args);
 
-$args = [
-	'orderby' => 'name',
-    'parent'  => 0,
-    'hide_empty'=> false
-];
-$categorias = get_categories($args);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<?php 
+	if( is_single() ): 
+	global $post;
+	?>
+	<meta property="fb:app_id" content="742882742916520" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="KioskoNOS - <?php echo $post->post_title; ?>" />
+	<meta property="og:description" content="<?php echo excerpt($post->post_content,20); ?>" />
+	<?php  
+	if( has_post_thumbnail($post->ID) ):
+        $thumbSrc = get_the_post_thumbnail_url($post->ID, 'product-thumbnail');
+    else:
+        $thumbSrc = get_bloginfo('template_url').'/assets/img/no-img.jpg';
+    endif;
+	?>
+	<meta property="og:image" content="<?php echo $thumbSrc; ?>" />
+	<meta property="og:url" content="<?php echo $post->guid; ?>" />
+	<?php else: ?>
+	<meta property="fb:app_id" content="742882742916520" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="KioskoNOS" />
+	<meta property="og:description" content="El primer portal de ventas, exclusivo para el sector Nos, San Bernardo" />
+	<meta property="og:image" content="<?php bloginfo('template_url') ?>/assets/img/kioskonos_fb.jpg" />
+	<meta property="og:url" content="<?php bloginfo('wpurl') ?>" />
+	<?php endif; ?>
+
 	<meta charset="utf-8" />
 	<link rel="shortcut icon" href="<?php bloginfo('template_url') ?>/assets/img/favicon.ico" type="image/x-icon">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -92,7 +105,9 @@ $categorias = get_categories($args);
     <script> WPURL = '<?php bloginfo('wpurl') ?>'</script>
     <script> TEMPLATE_URL = '<?php bloginfo('template_url') ?>'</script>
     <script> AJAX_URL = '<?php bloginfo('template_url') ?>/ajax.php'</script>
-
+    
+    <script src="https://www.w3counter.com/tracker.js?id=132532"></script>
+    <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5ed2f2969d73fe001243bf10&product=inline-share-buttons&cms=sop' async='async'></script>
 </head>
 
 <body <?php body_class() ?>>
@@ -100,13 +115,19 @@ $categorias = get_categories($args);
 
 
 
-<nav id="sidebar">
+	<nav id="sidebar">
         <div class="sidebar-header">
             <h5 class="title">Categorías</h5>
             <a href="" class="cerrar"><i class="fa fa-times"></i></a>
         </div>
         <ul class="dropdown-menu dropdown-with-icons">
 			<?php 
+			$args = [
+				'orderby' => 'name',
+			    'parent'  => 0,
+			    'hide_empty'=> false
+			];
+			$categorias = get_categories($args);
 			foreach ($categorias as $category) { 
 				if( $category->cat_ID != 1 ):
 				?>
@@ -154,11 +175,23 @@ $categorias = get_categories($args);
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu dropdown-with-icons">
-							<?php while ( $tiendas->have_posts() ) { $tiendas->the_post(); ?>
+							<?php 
+							$args = [
+								'posts_per_page' => -1,
+								'meta_key' => 'activa',
+								'meta_value' => true,
+								'post_type' => 'tiendas'
+							];
+							$tiendas = new WP_Query($args);
+							while ( $tiendas->have_posts() ) { $tiendas->the_post(); ?>
 							<li>
 								<a href="<?php the_permalink(); ?>"> <?php the_title(); ?> </a>
 							</li>
-							<?php } ?>
+							<?php 
+							} 
+							wp_reset_postdata();
+							wp_reset_query();
+							?>
 						</ul>
 					</li>
 

@@ -86,6 +86,7 @@ if( session('logged') ){
 
 			update_post_meta( $last_product_id, 'precio', $_POST['precio'] );
 			update_post_meta( $last_product_id, 'tienda', session('tienda_id') );
+			update_post_meta( $last_product_id, 'sud', true );
 			wp_set_post_categories( $last_product_id, $_POST['categoria'], false );
 
 			header('Location: ' . get_bloginfo('wpurl') . '/mis-productos/');

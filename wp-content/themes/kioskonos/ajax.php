@@ -52,7 +52,7 @@ if( $_POST['action'] == 'get_producto'){
 
 if( $_POST['action'] == 'denunciar_producto'){
     $producto = getProductById($_POST['product_id']);
-    $to = 'aterrile@gmail.com';
+    $to = 'hola@kioskonos.cl';
     $subject = 'Kioskonos - Denuncia de Producto';
     $headers  = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -81,7 +81,7 @@ if( $_POST['action'] == 'denunciar_producto'){
 
 
 if( $_POST['action'] == 'contacto'){
-    $to = 'aterrile@gmail.com';
+    $to = 'hola@kioskonos.cl';
     $subject = 'Kioskonos - contacto';
     $headers  = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";

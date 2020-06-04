@@ -82,6 +82,7 @@ if( session('logged') ){
 			update_post_meta( $last_tienda_id, 'instagram', $_POST['instagram'] );
 			update_post_meta( $last_tienda_id, 'twitter', $_POST['twitter'] );
 			update_post_meta( $last_tienda_id, 'youtube', $_POST['youtube'] );
+			update_post_meta( $last_tienda_id, 'despacho_a_domicilio', $_POST['despacho_a_domicilio'] );
 		
 			
 			// These files need to be included as dependencies when on the front end.
@@ -317,6 +318,23 @@ if( !is_array($banner) ){
 
 												<div class="input-group">
 													<span class="input-group-addon lg">
+														<i class="fa fa-home"></i>
+													</span>
+													<select name="despacho_a_domicilio" class="form-control">
+														<option value="">Realiza despacho a domicilio?</option>
+														<option value="SI">SI</option>
+														<option value="NO">NO</option>
+													</select>
+													<script>$("[name=despacho_a_domicilio]").val('<?php the_field('despacho_a_domicilio') ?>')</script>
+													<span class="input-group-addon">
+														<a href="javascript: alerta({text:'Ingresa tu número completo, inluyendo el +56 <br>Si no lo ingresas bien, la gente no podrá contactarte<br>(Puedes usar el mismo número de los Datos de contacto)'})">
+															<i class="material-icons">help_outline</i>
+														</a>
+													</span>
+												</div>
+
+												<div class="input-group">
+													<span class="input-group-addon lg">
 														<i class="fa fa-whatsapp"></i>
 													</span>
 													<input type="text" name="whatsapp" class="form-control" placeholder="Numero de whatsapp..." value="<?php the_field('whatsapp') ?>" required>
@@ -354,7 +372,7 @@ if( !is_array($banner) ){
 													<span class="input-group-addon">
 														<i class="material-icons">phone</i>
 													</span>
-													<input type="text" name="telefono" placeholder="Teléfono..." class="form-control" value="<?php the_field('telefono'); ?>" required />
+													<input type="text" name="telefono" placeholder="Teléfono..." class="form-control" value="<?php the_field('telefono'); ?>" />
 													<span></span>
 												</div>
 

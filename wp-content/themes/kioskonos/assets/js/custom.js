@@ -12,11 +12,13 @@ $(document).ready(function(){
                 <h5 class="title text-center mb-0">¿Primera vez haciendo tu tienda?</h5>
                 <h6 class="title text-center my-0 mb-3">Sigue estos consejos:</h6>
                 <ul>
-                    <li> Al activar tu tienda, significa que aparecerás en la lista de tiendas. Procura seguir los consejos y tips que se te dan al presionar el icono de ayuda <i class="material-icons">help_outline</i> para que tengas una tienda ordenada y agradable a la vista. </li>
+                    <li> Al activar tu tienda, significa que aparecerás en la lista de tiendas, donde podrás mostrar tus productos. </li>
+                    <li> Si no quieres activar una tienda, está bien. Puedes navegar otras tiendas y pedir productos a tu gusto. </li>
+                    <li> Procura seguir los consejos y tips que se te dan al presionar el icono de ayuda <i class="material-icons">help_outline</i> para que tengas una tienda ordenada y agradable a la vista. </li>
                     <li> Por defecto, la plataforma usa la palabra "Tienda de", seguido de tu nombre con el que te registraste. Puedes cambiar este nombre, pero evita que sea muy largo, para que tus clientes puedan recordarlo. </li>
-                    <li> La descripción no es requerida, pero es bueno que des una pequeña introducción de tu tiena, para que los clientes te conoscan más.</li>
-                    <li> La imagen de cabecera o "banner" aparecerá como imagen principal de fondo cuando la gente entre a revisar tu tienda. Debe ser de 1200x500 pixeles o similar tamaño proporcional.</li>
-                    <li> Recuerda ingresar bien tus datos de contactos y redes sociales. Si no tienes redes sociales, no importa. Ya aprenderás a usarlas.</li>
+                    <li> La descripción no es requerida, pero es bueno que des una pequeña introducción de tu tienda, para que los clientes te conozcan más.</li>
+                    <li> La imagen de cabecera o "banner" aparecerá como imagen principal de fondo cuando la gente entre a revisar tu tienda o uno de tus productos. Debe ser de 1200x500 pixeles o similar tamaño proporcional.</li>
+                    <li> Recuerda ingresar bien tus datos de contacto y redes sociales. Si no tienes redes sociales, no importa. Ya aprenderás a usarlas ;)</li>
                     <li> El logo de tu tienda <strong>debe ser una imagen cuadrada</strong>, ya que la plataforma la usa en esa proporción. (Evita que sea mas grande que 512x512 píxeles). </li>
                 </ul>
               </div>
@@ -102,8 +104,16 @@ $(document).ready(function(){
         event.preventDefault();
         if( $("#register-form [name=terminos]").prop('checked') == false ){
             alerta({text:'Debe aceptar los Términos y Condiciones para poder registrarse en KioskoNOS'});
+            $(".overlay").addClass('submit');
+            $(".overlay, .loader").hide();
         } else {
-            $("#register-form")[0].submit();
+            if( !checkPasswordStrength( $("[name=password]").val() ) ){
+                alerta({text:'Usa una contraseña de al menos 6 caracteres de largo y mezcla números con letras'});
+                $(".overlay").addClass('submit');
+                $(".overlay, .loader").hide();
+            } else {
+                $("#register-form")[0].submit();    
+            }
         }
     });
 
@@ -118,7 +128,9 @@ $(document).ready(function(){
                 $("#contact-form .btn").replaceWith('<div class="text-right mr-4 enviando"><strong>Enviando...</strong></div>');
             },
             success: function(json){
-                console.log(json);
+                $(".overlay").removeClass('submit');
+                $(".overlay, .loader").hide();
+                
                 $("#contact-form")[0].reset();
                 if(json.status = 'OK'){
                     button = `
@@ -128,8 +140,6 @@ $(document).ready(function(){
                     `;
                     $("#contact-form .enviando").replaceWith(button);
                     alerta({text:'Gracias por tu mensaje!<br>Tan pronto como nos sea posible, te contactaremos para resolver tu inquietud.<br>Que tengas un buen dia!'});
-                    $(".overlay").removeClass('submit');
-                    $(".overlay, .loader").hide();
                 }
             }
         })
@@ -249,11 +259,11 @@ $(document).ready(function(){
         whatsapp = $(this).data('whatsapp');
         title = $(this).data('title');
         if($("[name=despacho]").val() == "Si"){
-            despacho = 'con'
+            despacho = '%20con%20despacho%20a%20domicilio,';
         } else {
-            despacho = 'sin'
+            despacho = '';
         }
-        link = 'https://wa.me/'+whatsapp+'?text=Hola%21%20Me%20gustaría%20pedir%20' + $("[name=cuantos_quieres]").val() + '%20' + title + '%20que%20vi%20en%20kioskonos.cl,%20' + despacho + '%20despacho%20a%20domicilio,%20por%20favor';
+        link = 'https://wa.me/'+whatsapp+'?text=Hola%21%20Me%20gustaría%20pedir%20' + $("[name=cuantos_quieres]").val() + '%20' + title + '%20que%20vi%20en%20kioskonos.cl,'+ despacho +'%20por%20favor';
         window.open(link);
     })
 
@@ -429,8 +439,85 @@ function recalcularFavoritos(user_id,product_id,method){
 }
 
 
+function checkPasswordStrength(pass){
+    error = 0;
+    if( (/^[0-9]+$/).test(pass) ){
+        error++;
+    }
+
+    if( (/^[a-zA-Z]+$/).test(pass) ){
+        error++;
+    }
+
+    if( pass.length < 6 ){
+        error++;
+    }
+
+    if( error > 0 ){
+        return false;
+    } else {
+        return true;
+    }
+}
+
 
 function IsEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
+}
+
+
+function copyToClipboard(elem) {
+      // create hidden text element, if it doesn't already exist
+    var targetId = "_hiddenCopyText_";
+    var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+    var origSelectionStart, origSelectionEnd;
+    if (isInput) {
+        // can just use the original source element for the selection and copy
+        target = elem;
+        origSelectionStart = elem.selectionStart;
+        origSelectionEnd = elem.selectionEnd;
+    } else {
+        // must use a temporary form element for the selection and copy
+        target = document.getElementById(targetId);
+        if (!target) {
+            var target = document.createElement("textarea");
+            target.style.position = "absolute";
+            target.style.left = "-9999px";
+            target.style.top = "0";
+            target.id = targetId;
+            document.body.appendChild(target);
+        }
+        target.textContent = elem.textContent;
+    }
+    // select the content
+    var currentFocus = document.activeElement;
+    target.focus();
+    target.setSelectionRange(0, target.value.length);
+    
+    // copy the selection
+    var succeed;
+    try {
+          succeed = document.execCommand("copy");
+    } catch(e) {
+        succeed = false;
+    }
+    // restore original focus
+    if (currentFocus && typeof currentFocus.focus === "function") {
+        currentFocus.focus();
+    }
+    
+    if (isInput) {
+        // restore prior selection
+        elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+    } else {
+        // clear temporary content
+        target.textContent = "";
+    }
+
+    if(succeed){
+        alerta({text:'Copiado al potapapeles'});
+    }
+
+    return succeed;
 }

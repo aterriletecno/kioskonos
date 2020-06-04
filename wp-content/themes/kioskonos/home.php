@@ -63,7 +63,10 @@ $banners = get_field('items');
            		<?php  
            		$args = [
            			'post_type' => 'productos',
-           			'posts_per_page' => 6
+           			'posts_per_page' => 6,
+           			'orderby'        => 'rand',
+           			'meta_key' => 'sud',
+					'meta_value' => true
            		];
            		$query = new WP_Query($args);
            		while( $query->have_posts() ) : $query->the_post();
@@ -128,19 +131,26 @@ $banners = get_field('items');
 			<?php 
 			$args = [
 				'posts_per_page' => -1,
-				'post_type' => 'tiendas'
+				'post_type' => 'tiendas',
+				'orderby' => 'rand'
 			];
 			$tiendas = new WP_Query($args);
 			while ($tiendas->have_posts()) : $tiendas->the_post();
 			?>
 				<div style="padding: 0 30px">
-				<div class="card card-product">
-					<div class="card-content">
-						<a href="<?php the_permalink(); ?>">
-							<?php the_post_thumbnail('product-thumbnail') ?>
-						</a>
+					<div class="card card-product">
+						<div class="card-content">
+							<a href="<?php the_permalink(); ?>" data-toggle="toolti" title="<?php the_permalink(); ?>">
+								<?php 
+								if( has_post_thumbnail() ):
+									the_post_thumbnail('product-thumbnail',['alt' => get_the_title(),'title' => get_the_title()]);
+								else:
+									echo '<img src="'.get_bloginfo('template_url').'/assets/img/no-img.jpg" alt="'.get_the_title().'" title="'.get_the_title().'">';
+								endif;
+								?>
+							</a>
+						</div>
 					</div>
-				</div>
 				</div>
 			<?php endwhile; ?>
 		</div>

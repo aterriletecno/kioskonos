@@ -1,7 +1,28 @@
 <?php
-
 @session_start();
 
+
+function checkPasswordStrength($pwd) {
+    $errors = 0;
+
+    if (strlen($pwd) < 6) {
+        $errors++;
+    }
+
+    if (!preg_match("#[0-9]+#", $pwd)) {
+        $errors++;
+    }
+
+    if (!preg_match("#[a-zA-Z]+#", $pwd)) {
+        $errors++;
+    }     
+
+    if( $errors > 0 ){
+        return false;
+    } else {
+        return true;
+    }
+}
 
 function isTiendaActiva($tienda_id){
     $tienda_activa = get_field('activa',$tienda_id);
@@ -112,6 +133,8 @@ function getUserByEmail($email){
                 'tienda_id' => $tienda->ID
             ];
         endwhile;
+        wp_reset_query();
+        wp_reset_postdata();
         return $return_data;
     } else {
         return false;
@@ -271,120 +294,22 @@ function isFav($user_id,$product_id){
 }
 
 
-/********************************************************
-* FUNCIONES AJAX
-*********************************************************/
-add_action('wp_ajax_eliminar_producto','eliminar_producto');
-function eliminar_producto(){
-    if( isMyProduct($_POST['product_id']) ){
-        $post_delete = wp_delete_post($_POST['product_id']);
-        if( $post_delete ){
-            $json = ['status' => 'OK'];
+function enviarMail($to="", $from="", $subject="", $message=""){
+    if( $to != "" ){
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        if( $from ){
+            $headers .= 'From: ' . $from ."\r\n". 'X-Mailer: PHP/' . phpversion();
         } else {
-            $json = ['status' => 'FAILURE'];
+            $headers .= 'From: KioskoNOS <hola@kioskonos.cl>'."\r\n". 'X-Mailer: PHP/' . phpversion();    
         }
-    } else {
-        $json = ['status' => 'Access denied for product'];
+        
+        if(mail($to, $subject, $message, $headers)){
+            return true;
+        } else{
+            return false;
+        } 
     }
-
-    echo json_encode($json);
-    exit();  
-}
-
-
-add_action('wp_ajax_get_producto','get_producto');
-function get_producto(){
-    
-    $args = [
-        'post_type' => 'productos',
-        'p' => $_POST['product_id']
-    ];
-
-    $product_result = [];
-    $producto = new WP_Query($args);
-    while( $producto->have_posts() ) : $producto->the_post();
-        $product_result['id'] = get_the_ID();
-        $product_result['title'] = get_the_title();
-        $product_result['descripcion'] = nl2br(strip_tags(get_the_content()));
-        $product_result['thumbnail'] = get_the_post_thumbnail_url( get_the_ID(), 'product-thumbnail' );
-        $product_result['precio'] = get_field('precio',get_the_ID());
-        $product_result['categorias'] = get_the_category(get_the_ID());
-    endwhile;
-
-    echo json_encode($product_result);
-    exit();  
-}
-
-
-add_action('wp_ajax_denunciar_producto','denunciar_producto');
-function denunciar_producto(){
-    //$producto = getProductById($_POST['product_id']);
-    $to = 'aterrile@gmail.com';
-    $subject = 'Kioskonos - Denuncia de Producto';
-    $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= 'From: no-reply@kioskonos.cl'."\r\n".
-        'X-Mailer: PHP/' . phpversion();
-     
-    // Compose a simple HTML email message
-    $message = '<html><body>';
-    $message .= '<h3>Hola</h3>';
-    $message .= '<p>Acaban de denunciar el producto: <strong><a href="http://www.kioskonos.cl/?post_type=productos&p='.$_POST['product_id'].'">'. $_POST['product_id'] .'</a></strong></p>';
-    $message .= '<p>Motivo: ' . $_POST['denuncia_descripcion'] . '</p>';
-    $message .= '</body></html>';
-     
-    // Sending email
-    if(mail($to, $subject, $message, $headers)){
-        $json = ['status' => 'OK'];
-    } else{
-        $json = ['status' => 'ERROR'];
-    }
-
-    echo json_encode($json);
-    exit();  
-}
-
-
-add_action('wp_ajax_test_ajax','test_ajax');
-function test_ajax(){
-    
-    $json = [
-        'status' => 'TESTING',
-        'post' => $_POST
-    ];
-
-    echo json_encode($json);
-    exit();  
-}
-
-
-
-add_action('wp_ajax_contacto','contacto');
-function contacto(){
-    $to = 'aterrile@gmail.com';
-    $subject = 'Kioskonos - contacto';
-    $headers  = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-    $headers .= 'From: no-reply@kioskonos.cl'."\r\n".
-        'X-Mailer: PHP/' . phpversion();
-     
-    // Compose a simple HTML email message
-    $message = '<html><body>';
-    $message .= '<h3>Nuevo mensaje desde kioskonos.cl</h3>';
-    $message .= '<p><strong>Nombre: </strong>'. $_POST['nombre'] .' '. $_POST['apellido'] .'</p>';
-    $message .= '<p><strong>Email: </strong>'. $_POST['email'] .'</p>';
-    $message .= '<p><strong>Mensaje: </strong>'. $_POST['mensaje'] .'</p>';
-    $message .= '</body></html>';
-     
-    // Sending email
-    if(mail($to, $subject, $message, $headers)){
-        $json = ['status' => 'OK'];
-    } else{
-        $json = ['status' => 'ERROR'];
-    }
-
-    echo json_encode($json);
-    exit();  
 }
 
 

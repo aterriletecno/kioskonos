@@ -47,6 +47,9 @@ $facebook = get_field('facebook',$tienda_id);
 $instagram = get_field('instagram',$tienda_id);
 $twitter = get_field('twitter',$tienda_id);
 $youtube = get_field('youtube',$tienda_id);
+$telefono = get_field('telefono',$tienda_id);
+$email = get_field('email',$tienda_id);
+$whatsapp = get_field('whatsapp',$tienda_id);
 
 ?>
 <div class="page-header header-filter header-small" data-parallax="true" style="background-image: url('<?php echo $banner[0] ?>');">
@@ -62,6 +65,50 @@ $youtube = get_field('youtube',$tienda_id);
 </div>
 
 <div class="main main-raised">
+	<div class="row desktop">
+		<div class="col-xs-6 col-sm-6 col-lg-6">
+			<?php if( $facebook || $instagram || $twitter || $youtube ): ?>
+			<div class="pl-5">
+				<div class="social pt-4">
+					<strong>Visítanos en:</strong>
+					<?php if($facebook): ?>
+					<a href="<?php echo $facebook; ?>" target="_blank" data-toggle="tooltip" title="Facebook" class="mx-1 btn btn-just-icon btn-round btn-facebook">
+            			<i class="fa fa-facebook"> </i>
+            		</a>
+            		<?php endif; ?>
+
+            		<?php if($instagram): ?>
+            		<a href="<?php echo $instagram; ?>" target="_blank" data-toggle="tooltip" title="Instagram" class="mx-1 btn btn-just-icon btn-round btn-instagram">
+            			<i class="fa fa-instagram"> </i>
+            		</a>
+            		<?php endif; ?>
+
+            		<?php if($twitter): ?>
+            		<a href="<?php echo $twitter; ?>" target="_blank" data-toggle="tooltip" title="Twitter" class="mx-1 btn btn-just-icon btn-round btn-twitter">
+            			<i class="fa fa-twitter"> </i>
+            		</a>
+            		<?php endif; ?>
+
+            		<?php if($youtube): ?>
+            		<a href="<?php echo $youtube; ?>" target="_blank" data-toggle="tooltip" title="Youtube" class="mx-1 btn btn-just-icon btn-round btn-youtube">
+            			<i class="fa fa-youtube"> </i>
+            		</a>
+            		<?php endif; ?>
+				</div>
+			</div>
+			<?php endif; ?>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-lg-6 text-right" >
+			<?php if( $telefono || $email || $whatsapp ): ?>
+			<div class="pr-5 py-4">
+				Contacta esta tienda 
+				<a target="_blank" href="tel:<?php the_field('telefono') ?>" class="btn btn-just-icon btn-round btn-default"><i class="fa fa-phone"></i></a>
+				<a target="_blank" href="mailto:<?php the_field('email') ?>" class="btn btn-just-icon btn-round btn-danger"><i class="fa fa-envelope"></i></a>
+				<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo str_replace('+','',$whatsapp) ?>" class="btn btn-just-icon btn-round btn-success"><i class="fa fa-whatsapp"></i></a>
+			</div>
+			<?php endif; ?>
+		</div>
+	</div>
     <div class="section">
         <div class="container">
 
@@ -80,7 +127,7 @@ $youtube = get_field('youtube',$tienda_id);
                 <div class="row">
     				<div class="col-md-8 col-md-offset-2">
     					<?php if( $facebook || $instagram || $twitter || $youtube ): ?>
-    					<div class="social pt-4">
+    					<div class="social pt-4 mobile">
     						<strong>Visítanos en:</strong><br>
     						<?php if($facebook): ?>
     						<a href="<?php echo $facebook; ?>" target="_blank" data-toggle="tooltip" title="Facebook" class="mx-1 btn btn-just-icon btn-round btn-facebook">
@@ -107,6 +154,15 @@ $youtube = get_field('youtube',$tienda_id);
 	                		<?php endif; ?>
     					</div>
     					<?php endif; ?>
+
+    					<?php if( $facebook || $instagram || $twitter || $youtube ): ?>
+						<div class="pt-3 mobile">
+							<strong>Contacta esta tienda </strong><br>
+							<a target="_blank" href="tel:<?php the_field('telefono') ?>" class="mx-1 btn btn-just-icon btn-round btn-default"><i class="fa fa-phone"></i></a>
+							<a target="_blank" href="mailto:<?php the_field('email') ?>" class="mx-1 btn btn-just-icon btn-round btn-danger"><i class="fa fa-envelope"></i></a>
+							<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo str_replace('+','',$whatsapp) ?>" class="mx-1 btn btn-just-icon btn-round btn-success"><i class="fa fa-whatsapp"></i></a>
+						</div>
+						<?php endif; ?>
 
     					<h5 class="description pt-2">
     						<?php the_content(); ?>
@@ -222,6 +278,26 @@ $youtube = get_field('youtube',$tienda_id);
 					  	?>
    					</div>
    				</div>
+
+   				<div class="col-lg-12 col-xs-12">
+   					<div class="text-right social-box">
+                        <strong class="pr-2 d-block d-lg-inline">Comparte esta tienda en:</strong>
+                        <button data-toggle="tooltip" title="Facebook" onclick="window.open('https://www.facebook.com/sharer.php?t=<?php echo urlencode('Me gusta esta tienda que vi en www.kioskonos.cl') ?>&u=<?php echo urlencode(get_permalink()) ?>','','width=600,height=300')" class="btn btn-just-icon btn-round btn-facebook">
+                            <i class="fa fa-facebook"> </i>
+                        </button>
+                        <button data-toggle="tooltip" title="Twitter" onclick="window.open('https://twitter.com/intent/tweet?text=<?php echo urlencode('Me gusta esta tienda que vi en www.kioskonos.cl: ' . get_permalink()) ?>','','width=600,height=300')" class="btn btn-just-icon btn-round btn-twitter">
+                            <i class="fa fa-twitter"></i>
+                        </button>
+                        <button data-toggle="tooltip" title="WhatsApp" onclick="window.open('https://wa.me/?text=<?php echo urlencode('Me gusta esta tienda que vi en www.kioskonos.cl: ' . get_permalink()) ?>','','width=600,height=300')" class="btn btn-just-icon btn-round btn-success">
+                            <i class="fa fa-whatsapp"></i>
+                        </button>
+                        <input class="invisible" id="copyTarget" value="<?php the_permalink(); ?>">
+                        <button data-toggle="tooltip" title="Copiar perfil de la Tienda" onclick="copyToClipboard(document.getElementById('copyTarget'));" class="btn btn-just-icon btn-round btn-default">
+                            <i class="fa fa-link"></i>
+                        </button>
+                    </div>
+   				</div>
+
 			</div>
 		
 		</div>
