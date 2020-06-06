@@ -573,6 +573,33 @@ body.home .page-header .brand {
     right: 20px;
 }
 
+#tiendas .tienda-item{
+    height: 350px;
+}
+
+#tiendas .tienda-item img{
+    border-radius: 50%;
+    max-height: 86%;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+#tiendas .tienda-item:hover img{
+    -moz-transform: scale(1.03);
+    -webkit-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+#tiendas .tienda-item .title{
+    max-height: 50px;
+    overflow: hidden;
+}
+
+#tiendas .tienda-item:hover .title{
+    color: #4caf50;
+}
+
 .single-tiendas .avatar{
     width: 300px;
     height: 300px;
@@ -895,6 +922,10 @@ bodybody.single-productos .main-product .nav > li{
 
 
 @media(max-width: 480px){
+    h1.title{
+        font-size: 32px;
+    }
+
     .profile-page .profile img {
         width: 130px;
         height: 130px;
@@ -920,4 +951,17 @@ bodybody.single-productos .main-product .nav > li{
     body.single-productos .botones span.d-block{
         margin-top: 30px;
     }
+
+    #tiendas .tienda-item{
+        max-height: 250px
+    }
+
+    .card.card-product .card-content{
+        padding: 10px !important;
+    }
+
+    .card.card-product .card-content h4{
+        font-size: 14px !important;
+    }
+
 }

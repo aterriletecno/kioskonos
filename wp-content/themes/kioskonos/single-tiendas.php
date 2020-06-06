@@ -69,7 +69,7 @@ $whatsapp = get_field('whatsapp',$tienda_id);
 		<div class="col-xs-6 col-sm-6 col-lg-6">
 			<?php if( $facebook || $instagram || $twitter || $youtube ): ?>
 			<div class="pl-5">
-				<div class="social pt-4">
+				<div class="social-box pt-4">
 					<strong>Visítanos en:</strong>
 					<?php if($facebook): ?>
 					<a href="<?php echo $facebook; ?>" target="_blank" data-toggle="tooltip" title="Facebook" class="mx-1 btn btn-just-icon btn-round btn-facebook">
@@ -100,11 +100,20 @@ $whatsapp = get_field('whatsapp',$tienda_id);
 		</div>
 		<div class="col-xs-6 col-sm-6 col-lg-6 text-right" >
 			<?php if( $telefono || $email || $whatsapp ): ?>
-			<div class="pr-5 py-4">
-				Contacta esta tienda 
-				<a target="_blank" href="tel:<?php the_field('telefono') ?>" class="btn btn-just-icon btn-round btn-default"><i class="fa fa-phone"></i></a>
+			<div class="pr-5 social-box py-4">
+				<strong>Contacta esta tienda </strong>
+				
+				<?php if($telefono): ?>
+				<a target="_blank" href="tel:<?php echo $telefono; ?>" class="btn btn-just-icon btn-round btn-default"><i class="fa fa-phone"></i></a>
+				<?php endif; ?>
+				
+				<?php if($email): ?>
 				<a target="_blank" href="mailto:<?php the_field('email') ?>" class="btn btn-just-icon btn-round btn-danger"><i class="fa fa-envelope"></i></a>
+				<?php endif; ?>
+
+				<?php if($whatsapp): ?>
 				<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo str_replace('+','',$whatsapp) ?>" class="btn btn-just-icon btn-round btn-success"><i class="fa fa-whatsapp"></i></a>
+				<?php endif; ?>
 			</div>
 			<?php endif; ?>
 		</div>
@@ -127,7 +136,7 @@ $whatsapp = get_field('whatsapp',$tienda_id);
                 <div class="row">
     				<div class="col-md-8 col-md-offset-2">
     					<?php if( $facebook || $instagram || $twitter || $youtube ): ?>
-    					<div class="social pt-4 mobile">
+    					<div class="social-box pt-4 mobile">
     						<strong>Visítanos en:</strong><br>
     						<?php if($facebook): ?>
     						<a href="<?php echo $facebook; ?>" target="_blank" data-toggle="tooltip" title="Facebook" class="mx-1 btn btn-just-icon btn-round btn-facebook">
@@ -155,12 +164,21 @@ $whatsapp = get_field('whatsapp',$tienda_id);
     					</div>
     					<?php endif; ?>
 
-    					<?php if( $facebook || $instagram || $twitter || $youtube ): ?>
-						<div class="pt-3 mobile">
-							<strong>Contacta esta tienda </strong><br>
-							<a target="_blank" href="tel:<?php the_field('telefono') ?>" class="mx-1 btn btn-just-icon btn-round btn-default"><i class="fa fa-phone"></i></a>
-							<a target="_blank" href="mailto:<?php the_field('email') ?>" class="mx-1 btn btn-just-icon btn-round btn-danger"><i class="fa fa-envelope"></i></a>
-							<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo str_replace('+','',$whatsapp) ?>" class="mx-1 btn btn-just-icon btn-round btn-success"><i class="fa fa-whatsapp"></i></a>
+    					<?php if( $telefono || $email || $whatsapp ): ?>
+						<div class="social-box pt-3 mobile">
+							<strong>Contacta esta tienda </strong>
+							
+							<?php if($telefono): ?>
+							<a target="_blank" href="tel:<?php echo $telefono; ?>" class="btn btn-just-icon btn-round btn-default"><i class="fa fa-phone"></i></a>
+							<?php endif; ?>
+							
+							<?php if($email): ?>
+							<a target="_blank" href="mailto:<?php the_field('email') ?>" class="btn btn-just-icon btn-round btn-danger"><i class="fa fa-envelope"></i></a>
+							<?php endif; ?>
+
+							<?php if($whatsapp): ?>
+							<a target="_blank" href="https://api.whatsapp.com/send?phone=<?php echo str_replace('+','',$whatsapp) ?>" class="btn btn-just-icon btn-round btn-success"><i class="fa fa-whatsapp"></i></a>
+							<?php endif; ?>
 						</div>
 						<?php endif; ?>
 
@@ -173,6 +191,20 @@ $whatsapp = get_field('whatsapp',$tienda_id);
             <div id="product-list"></div>
 			<h2 class="title text-center">Nuestros productos</h2>
 			<div class="row">
+
+				<?php 
+				$args_productos = [
+		 			'meta_key' => 'tienda',
+		 			'meta_value' => $tienda_id,
+		 			'post_type' => 'productos',
+		 			'posts_per_page' => -1,
+		 		];
+		 		if( $_GET['cat'] ){
+		 			$args_productos['cat'] = $_GET['cat'];
+		 		}
+		 		$query_productos = new WP_Query($args_productos);
+
+				if($query_productos->found_posts > 0): ?>
 				<div class="col-md-3">
 					<div class="card card-refine card-plain">
 						<div class="card-content">
@@ -217,17 +249,7 @@ $whatsapp = get_field('whatsapp',$tienda_id);
    					<div class="row">
 					 		
 				 		<?php  
-				 		$args = [
-				 			'meta_key' => 'tienda',
-				 			'meta_value' => $tienda_id,
-				 			'post_type' => 'productos',
-				 			'posts_per_page' => -1,
-				 		];
-				 		if( $_GET['cat'] ){
-				 			$args['cat'] = $_GET['cat'];
-				 		}
-				 		$query = new WP_Query($args);
-				 		while( $query->have_posts() ) : $query->the_post();
+				 		while( $query_productos->have_posts() ) : $query_productos->the_post();
 				 		?>
 
 					 	<div class="col-xs-6 col-sm-6 col-md-4 col-centered">
@@ -274,10 +296,15 @@ $whatsapp = get_field('whatsapp',$tienda_id);
 						</div>
 					  	<?php  
 					  	endwhile;	
-					  	wp_reset_query();
+				  		wp_reset_query();
 					  	?>
    					</div>
    				</div>
+   				<?php else: ?>
+				<div class="col-xs-12 col-lg-12 mb-5">
+					<h5 class="title text-center">Aún no hay productos publicados, pero igual puedes contactar la Tienda</h5>
+				</div>
+   				<?php endif; ?>
 
    				<div class="col-lg-12 col-xs-12">
    					<div class="text-right social-box">

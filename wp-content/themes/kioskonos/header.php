@@ -170,10 +170,12 @@ if( session('logged') && !$valid_user ){
         	<div class="collapse navbar-collapse">
         		<ul class="nav navbar-nav navbar-right">
     				<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="<?php bloginfo('wpurl') ?>/tiendas">
 							<i class="material-icons">storefront</i> Tiendas
-							<b class="caret"></b>
+							<!--<b class="caret"></b>-->
 						</a>
+						
+						<!--
 						<ul class="dropdown-menu dropdown-with-icons">
 							<?php 
 							$args = [
@@ -193,6 +195,7 @@ if( session('logged') && !$valid_user ){
 							wp_reset_query();
 							?>
 						</ul>
+						-->
 					</li>
 
 					<li class="dropdown categorias_menu">
